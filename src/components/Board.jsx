@@ -4,14 +4,15 @@ import '../scss/board.scss'
 
 function Board(props) {
 
-  const rowCount = 8
+  const iterateValue = 8
 
   return (
     <div className="board">
-      {Array(rowCount).fill('').map((row, rowIndex) => (
+      {Array(iterateValue).fill('').map((row, rowIndex) => (
         <Row
           key={`row_${rowIndex}`}
           rowIndex={rowIndex}
+          iterateValue={iterateValue}
         />
       ))}
     </div>
