@@ -1,12 +1,21 @@
-import React, {Component} from 'react';
+import React from 'react';
+import Square from './Square'
+import '../scss/row.scss'
 
-class row extends Component {
-  render() {
-    return (
-      <div>
-      </div>
-    );
-  }
+function Row({ rowIndex }) {
+
+  const squareCount = 8
+
+  return (
+    <div className="row">
+      {Array(squareCount).fill('').map((square, squareIndex) => (
+        <Square
+          key={`square_${squareIndex}`}
+          rowIndex={rowIndex}
+          squareIndex={squareIndex}/>
+      ))}
+    </div>
+  );
 }
 
-export default row;
+export default Row;
