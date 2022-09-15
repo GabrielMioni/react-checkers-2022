@@ -1,0 +1,14 @@
+.square {
+  border: 1px solid black;
+  flex-grow: 1;
+
+  &.color {
+    &-a {
+      background-color: black;
+      color: white;
+    }
+    &-b {
+      background-color: red;
+    }
+  }
+}
