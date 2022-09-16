@@ -1,8 +1,8 @@
 import React from 'react';
-import '../scss/square.scss'
 import Checker from './Checker'
 import { isOdd } from '../utils/utils'
 import { useSelector } from 'react-redux'
+import '../scss/square.scss'
 
 const findOccupyingChecker = (checkers, rowIndex, squareIndex) => {
   return  checkers.find(checker => {
