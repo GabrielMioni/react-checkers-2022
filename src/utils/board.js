@@ -11,7 +11,6 @@ export const initCheckers = (player, startRow) => {
   let square = setInitialSquarePosition(row)
 
   let rowSquareCount = 0
-  console.log(rowSquareCount)
 
   while (checkers.length < 12) {
     const checkerObject = {
