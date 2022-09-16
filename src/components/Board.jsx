@@ -12,7 +12,9 @@ function Board(props) {
 
   useEffect(() => {
     const checkersA = initCheckers('a', 0)
-    dispatch(setCheckers(checkersA))
+    const checkersB = initCheckers('b', 5)
+    const allCheckers = [...checkersA, ...checkersB]
+    dispatch(setCheckers(allCheckers))
   }, [])
 
   return (
