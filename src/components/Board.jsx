@@ -1,22 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Row from './Row'
 import { initCheckers } from '../utils/board'
+import { useDispatch } from 'react-redux'
+import { setCheckers } from '../store/checkersSlice'
 import '../scss/board.scss'
 
 function Board(props) {
 
   const iterateValue = 8
-
-  const [checkersPlayerA, setCheckersPlayerA] = useState([])
-  const [checkersPlayerB, setCheckersPlayerB] = useState([])
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const checkersA = initCheckers('a', 0)
-    const checkersB = initCheckers('b', 5)
-    setCheckersPlayerA(checkersA)
-    setCheckersPlayerB(checkersB)
-    console.log(checkersPlayerA)
-    console.log(checkersPlayerB)
+    dispatch(setCheckers(checkersA))
   }, [])
 
   return (
