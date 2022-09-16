@@ -1,0 +1,28 @@
+.checker {
+  height: 85%;
+  width: 85%;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  position: relative;
+
+  &:after {
+    position: absolute;
+    content: '';
+    border: 2px solid white;
+    border-radius: 50%;
+    height: 70%;
+    width: 70%;
+  }
+
+  &.player {
+    &-a {
+      background-color: brown;
+    }
+    &-b {
+      background-color: black;
+    }
+  }
+}
