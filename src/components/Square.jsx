@@ -3,7 +3,7 @@ import Checker from './Checker'
 import {useDispatch, useSelector} from 'react-redux'
 import { setActiveChecker } from '../store/gameSlice'
 import { isOdd } from '../utils/utils'
-import { findItemOccupyingSquare } from '../utils/board'
+import { findItemOccupyingSquare } from '../utils/game'
 import '../scss/square.scss'
 
 const colorClass = (rowIndex, squareIndex) => {

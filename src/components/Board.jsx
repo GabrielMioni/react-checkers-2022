@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Row from './Row'
-import { initCheckers } from '../utils/board'
+import { initCheckers } from '../utils/game'
 import { useDispatch } from 'react-redux'
 import { setCheckers } from '../store/gameSlice'
 import '../scss/board.scss'
