@@ -3,7 +3,7 @@ import Checker from './Checker'
 import {useDispatch, useSelector} from 'react-redux'
 import { setActiveChecker } from '../store/gameSlice'
 import { isOdd } from '../utils/utils'
-import { findItemOccupyingSquare } from '../utils/game'
+import { findItemOccupyingSquare, getAvailableMoves } from '../utils/game'
 import '../scss/square.scss'
 
 const colorClass = (rowIndex, squareIndex) => {
@@ -30,6 +30,11 @@ function Square({ rowIndex, squareIndex }) {
 
   const clickSquare = () => {
     dispatch(setActiveChecker(occupyingChecker))
+    if (occupyingChecker) {
+      console.log('getting moves')
+      const availableMoves = getAvailableMoves(occupyingChecker.position)
+      console.log(availableMoves)
+    }
   }
 
   return (
