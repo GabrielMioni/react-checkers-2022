@@ -34,9 +34,11 @@ export const initCheckers = (player, startRow) => {
   return checkers
 }
 
-export const findOccupyingChecker = (checkers, rowIndex, squareIndex) => {
-  return  checkers.find(checker => {
-    const { row: rowPosition, square: squarePosition } = checker.position
+export const findItemOccupyingSquare = (items, rowIndex, squareIndex) => {
+  const item = items.find(item => {
+    const { row: rowPosition, square: squarePosition } = item.position
     return rowPosition === rowIndex && squarePosition === squareIndex
   })
+
+  return item ? item : null
 }
