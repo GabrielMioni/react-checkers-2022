@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
-import checkersReducer from '../store/checkersSlice'
+import checkersReducer from './gameSlice'
 
 export default configureStore({
   reducer: {
-    checkers: checkersReducer
+    game: checkersReducer
   },
 })

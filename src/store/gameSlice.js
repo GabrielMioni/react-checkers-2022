@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-export const checkersSlice = createSlice({
-  name: 'checkers',
+export const gameSlice = createSlice({
+  name: 'game',
   initialState: {
     checkers: [],
     activeChecker: null
@@ -17,6 +17,6 @@ export const checkersSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setCheckers, setActiveChecker } = checkersSlice.actions
+export const { setCheckers, setActiveChecker } = gameSlice.actions
 
-export default checkersSlice.reducer
+export default gameSlice.reducer

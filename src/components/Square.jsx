@@ -1,7 +1,7 @@
 import React from 'react';
 import Checker from './Checker'
 import {useDispatch, useSelector} from 'react-redux'
-import { setActiveChecker } from '../store/checkersSlice'
+import { setActiveChecker } from '../store/gameSlice'
 import { isOdd } from '../utils/utils'
 import { findItemOccupyingSquare } from '../utils/board'
 import '../scss/square.scss'
@@ -25,7 +25,7 @@ const colorClass = (rowIndex, squareIndex) => {
 function Square({ rowIndex, squareIndex }) {
   const dispatch = useDispatch()
 
-  const checkers = useSelector((state) => state.checkers.checkers)
+  const checkers = useSelector((state) => state.game.checkers)
   const occupyingChecker = findItemOccupyingSquare(checkers, rowIndex, squareIndex)
 
   const clickSquare = () => {
