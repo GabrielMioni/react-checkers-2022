@@ -21,8 +21,7 @@ function Board(props) {
   useEffect(() => {
     const checkersA = initCheckers('a', 0)
     const checkersB = initCheckers('b', 5)
-    const allCheckers = [...checkersA, ...checkersB]
-    dispatch(setCheckers(allCheckers))
+    dispatch(setCheckers([...checkersA, ...checkersB]))
   }, [])
 
   return (
