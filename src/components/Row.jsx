@@ -2,7 +2,7 @@ import React from 'react';
 import Square from './Square'
 import '../scss/row.scss'
 
-function Row({ rowIndex, iterateValue }) {
+function Row({ rowIndex, iterateValue, clickSquare }) {
 
   return (
     <div className="row">
@@ -10,7 +10,8 @@ function Row({ rowIndex, iterateValue }) {
         <Square
           key={`square_${squareIndex}`}
           rowIndex={rowIndex}
-          squareIndex={squareIndex}/>
+          squareIndex={squareIndex}
+          clickSquare={clickSquare}/>
       ))}
     </div>
   );

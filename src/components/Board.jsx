@@ -5,6 +5,14 @@ import { useDispatch } from 'react-redux'
 import { setCheckers } from '../store/checkersSlice'
 import '../scss/board.scss'
 
+const clickSquare = (checker = null) => {
+  if (!checker) {
+    console.log('no checker')
+  } else {
+    console.log(checker)
+  }
+}
+
 function Board(props) {
 
   const iterateValue = 8
@@ -24,6 +32,7 @@ function Board(props) {
           key={`row_${rowIndex}`}
           rowIndex={rowIndex}
           iterateValue={iterateValue}
+          clickSquare={clickSquare}
         />
       ))}
     </div>
