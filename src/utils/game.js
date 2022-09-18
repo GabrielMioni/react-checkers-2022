@@ -1,6 +1,6 @@
 import { isOdd, setMove } from './utils'
 import store from '../store'
-import {setCheckers} from '../store/gameSlice'
+import { setCheckers } from '../store/gameSlice'
 
 const setInitialSquarePosition = (row) => {
   return isOdd(row) ? 0 : 1
@@ -72,7 +72,7 @@ export const findMoveOccupyingSquare = (availableMoves, rowIndex, squareIndex) =
   return false
 }
 
-export const getAvailableMoves = ({ row, square }) => {
+export const getNeighborSquares = ({ row, square }) => {
   const directions = {
     up: row - 1,
     down: row + 1,
@@ -96,6 +96,49 @@ export const getAvailableMoves = ({ row, square }) => {
     c: setMove(down, right),
     d: setMove(down, left)
   }
+}
+
+export const getCheckerFromSquare = (row, square, checkers) => {
+  const found = checkers.find(checker => {
+    const { row: occupiedRow, square: occupiedSquare } = checker.position
+    return row === occupiedRow && square === occupiedSquare
+  })
+  return found ? found : null
+}
+
+export const checkForJumps = (availableMoves) => {
+  const state = store.getState()
+  const { checkers, activeChecker } = state.game
+
+  const movesOut = { ...availableMoves }
+
+  Object.keys(availableMoves).map(key => {
+    const move = availableMoves[key]
+    if (!move) {
+      return
+    }
+    const { row: moveRow, square: moveSquare } = move
+    const occupyingChecker = getCheckerFromSquare(moveRow, moveSquare, checkers)
+
+    if (!occupyingChecker || occupyingChecker.player === activeChecker.player) {
+      return
+    }
+
+    const opponentSquares = getNeighborSquares(occupyingChecker.position)
+    const jumpSquareMove = opponentSquares[key]
+    const { row: jumpRow, square: jumpSquare } = jumpSquareMove
+    const occupyingCheckerTwo = getCheckerFromSquare(jumpRow, jumpSquare, checkers)
+
+    movesOut[key] = occupyingCheckerTwo
+      ? null
+      : { row: jumpRow, square: jumpSquare }
+  })
+  return movesOut
+}
+
+export const getAvailableMoves = ({ row, square }) => {
+  const neighborSquares = getNeighborSquares({ row, square })
+  return checkForJumps(neighborSquares)
 }
 
 export const getUpdatedCheckers = (activeChecker, checkers, row, square) => {

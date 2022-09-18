@@ -1,9 +1,9 @@
 import React from 'react';
 import Checker from './Checker'
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setActiveChecker, setAvailableMoves } from '../store/gameSlice'
 import { isOdd } from '../utils/utils'
-import { findItemOccupyingSquare, getAvailableMoves, findMoveOccupyingSquare } from '../utils/game'
+import { findItemOccupyingSquare, findMoveOccupyingSquare, getAvailableMoves } from '../utils/game'
 import '../scss/square.scss'
 import AvailableMove from './AvailableMove'
 
@@ -23,7 +23,7 @@ const colorClass = (rowIndex, squareIndex) => {
       : colorA
 }
 
-function Square({ rowIndex, squareIndex }) {
+function Square ({ rowIndex, squareIndex }) {
   const dispatch = useDispatch()
 
   const checkers = useSelector((state) => state.game.checkers)
@@ -35,8 +35,8 @@ function Square({ rowIndex, squareIndex }) {
   const clickSquare = () => {
     dispatch(setActiveChecker(occupyingChecker))
     if (occupyingChecker) {
-      const availableMoves = getAvailableMoves(occupyingChecker.position)
-      dispatch(setAvailableMoves(availableMoves))
+      const newMoves = getAvailableMoves(occupyingChecker.position)
+      dispatch(setAvailableMoves(newMoves))
     }
   }
 
