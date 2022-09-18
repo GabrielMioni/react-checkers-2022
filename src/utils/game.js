@@ -1,4 +1,6 @@
 import { isOdd, setMove } from './utils'
+import store from '../store'
+import {setCheckers} from '../store/gameSlice'
 
 const setInitialSquarePosition = (row) => {
   return isOdd(row) ? 0 : 1
@@ -93,9 +95,18 @@ export const getAvailableMoves = ({ row, square }) => {
     b: setMove(up, right),
     c: setMove(down, right),
     d: setMove(down, left)
-    // a: { position: setMove(up, left) },
-    // b: { position: setMove(up, right) },
-    // c: { position: setMove(down, right) },
-    // d: { position: setMove(down, left) }
   }
+}
+
+export const moveChecker = (row, square) => {
+  const state = store.getState()
+
+  const activeChecker = { ...state.game.activeChecker }
+  activeChecker.position = { row, square }
+
+  const checkers = [...state.game.checkers]
+  const index = checkers.findIndex(checker => checker.id === activeChecker.id)
+  checkers.splice(index, 1, activeChecker)
+
+  store.dispatch(setCheckers(checkers))
 }
