@@ -1,6 +1,4 @@
 import { isOdd, setMove } from './utils'
-import store from '../store'
-import { setCheckers } from '../store/gameSlice'
 
 const setInitialSquarePosition = (row) => {
   return isOdd(row) ? 0 : 1
@@ -106,56 +104,46 @@ export const getCheckerFromSquare = (row, square, checkers) => {
   return found ? found : null
 }
 
-export const checkForJumps = (availableMoves) => {
-  const state = store.getState()
-  const { checkers, activeChecker } = state.game
+export const checkForOpponentNeighbors = (neighborSquares, checkers, activeChecker) => {
+  const movesOut = { ...neighborSquares }
 
-  const movesOut = { ...availableMoves }
-
-  Object.keys(availableMoves).map(key => {
-    const move = availableMoves[key]
+  Object.keys(neighborSquares).map(key => {
+    const move = neighborSquares[key]
     if (!move) {
       return
     }
+
     const { row: moveRow, square: moveSquare } = move
     const occupyingChecker = getCheckerFromSquare(moveRow, moveSquare, checkers)
-
-    if (!occupyingChecker || occupyingChecker.player === activeChecker.player) {
+    if (!occupyingChecker) {
+      return
+    }
+    if (occupyingChecker.player === activeChecker.player) {
+      movesOut[key] = null
       return
     }
 
-    const opponentSquares = getNeighborSquares(occupyingChecker.position)
-    const jumpSquareMove = opponentSquares[key]
-    const { row: jumpRow, square: jumpSquare } = jumpSquareMove
+    const opponentNeighbors = getNeighborSquares(occupyingChecker.position)
+    const jumpMove = opponentNeighbors[key]
+    const { row: jumpRow, square: jumpSquare } = jumpMove
+
     const occupyingCheckerTwo = getCheckerFromSquare(jumpRow, jumpSquare, checkers)
 
     movesOut[key] = occupyingCheckerTwo
       ? null
       : { row: jumpRow, square: jumpSquare }
   })
+
   return movesOut
 }
 
-export const getAvailableMoves = ({ row, square }) => {
-  const neighborSquares = getNeighborSquares({ row, square })
-  return checkForJumps(neighborSquares)
-}
-
-export const getUpdatedCheckers = (activeChecker, checkers, row, square) => {
+export const getCheckersAfterMove = (activeChecker, allCheckers, row, square) => {
   const updatedChecker = { ...activeChecker }
   updatedChecker.position = { row, square }
 
-  const updatedCheckers = [...checkers]
+  const updatedCheckers = [...allCheckers]
   const index = updatedCheckers.findIndex(checker => checker.id === updatedChecker.id)
   updatedCheckers.splice(index, 1, updatedChecker)
 
   return updatedCheckers
-}
-
-export const moveChecker = (row, square) => {
-  const state = store.getState()
-  const { activeChecker, checkers } = state.game
-
-  const updatedCheckers = getUpdatedCheckers(activeChecker, checkers, row, square)
-  store.dispatch(setCheckers(updatedCheckers))
 }
