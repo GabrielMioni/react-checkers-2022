@@ -1,13 +1,15 @@
 import React from 'react';
-import { moveChecker } from '../utils/game'
+import * as gameState from '../services/gameStateService' 
 import '../scss/available-move.scss'
 
-function AvailableMove({ row, square }) {
+function AvailableMove ({ row, square }) {
+  const activeChecker = gameState.GetActiveChecker()
+  const allCheckers = gameState.GetAllCheckers()
   return (
     <div
       className="available-move"
-      onClick={() => moveChecker(row, square)}>
-    </div>
+      onClick={() => gameState.SetCheckerMove(row, square, activeChecker, allCheckers)}
+    />
   );
 }
 
