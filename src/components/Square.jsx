@@ -6,6 +6,7 @@ import { isOdd } from '../utils/utils'
 import { findItemOccupyingSquare, findMoveOccupyingSquare, getAvailableMoves } from '../utils/game'
 import '../scss/square.scss'
 import AvailableMove from './AvailableMove'
+import * as gameState from '../services/gameStateService'
 
 const colorClass = (rowIndex, squareIndex) => {
   const rowIndexIsOdd = isOdd(rowIndex)
@@ -23,14 +24,11 @@ const colorClass = (rowIndex, squareIndex) => {
       : colorA
 }
 
-function Square ({ rowIndex, squareIndex }) {
+function Square ({ row, square }) {
   const dispatch = useDispatch()
 
-  const checkers = useSelector((state) => state.game.checkers)
-  const occupyingChecker = findItemOccupyingSquare(checkers, rowIndex, squareIndex)
-
-  const moves = useSelector((state) => state.game.availableMoves)
-  const occupyingMove = findMoveOccupyingSquare(moves, rowIndex, squareIndex)
+  const occupyingChecker = gameState.GetCheckerInSquare(row, square)
+  const occupyingMove = gameState.GetMoveInSquare(row, square)
 
   const clickSquare = () => {
     dispatch(setActiveChecker(occupyingChecker))
@@ -42,15 +40,15 @@ function Square ({ rowIndex, squareIndex }) {
 
   return (
     <div
-      className={`square ${colorClass(rowIndex, squareIndex)}`}
+      className={`square ${colorClass(row, square)}`}
       onClick={() => clickSquare(occupyingChecker)}>
       { !occupyingChecker
-        && `${rowIndex},${squareIndex}`}
+        && `${row},${square}`}
       { !occupyingChecker
         && occupyingMove
         && <AvailableMove
-          row={rowIndex}
-          square={squareIndex} /> }
+          row={row}
+          square={square} /> }
       { occupyingChecker
         && <Checker checker={occupyingChecker}/> }
     </div>
