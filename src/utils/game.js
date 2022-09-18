@@ -50,7 +50,7 @@ export const findItemOccupyingSquare = (items, rowIndex, squareIndex) => {
 
 export const findMoveOccupyingSquare = (availableMoves, rowIndex, squareIndex) => {
   if (!availableMoves) {
-    return
+    return false
   }
   const result = Object.keys(availableMoves).map(key => {
     const move = availableMoves[key]
@@ -98,15 +98,21 @@ export const getAvailableMoves = ({ row, square }) => {
   }
 }
 
+export const getUpdatedCheckers = (activeChecker, checkers, row, square) => {
+  const updatedChecker = { ...activeChecker }
+  updatedChecker.position = { row, square }
+
+  const updatedCheckers = [...checkers]
+  const index = updatedCheckers.findIndex(checker => checker.id === updatedChecker.id)
+  updatedCheckers.splice(index, 1, updatedChecker)
+
+  return updatedCheckers
+}
+
 export const moveChecker = (row, square) => {
   const state = store.getState()
+  const { activeChecker, checkers } = state.game
 
-  const activeChecker = { ...state.game.activeChecker }
-  activeChecker.position = { row, square }
-
-  const checkers = [...state.game.checkers]
-  const index = checkers.findIndex(checker => checker.id === activeChecker.id)
-  checkers.splice(index, 1, activeChecker)
-
-  store.dispatch(setCheckers(checkers))
+  const updatedCheckers = getUpdatedCheckers(activeChecker, checkers, row, square)
+  store.dispatch(setCheckers(updatedCheckers))
 }
