@@ -7,3 +7,10 @@ export const setMove = (directionY, directionX) => {
     ? null
     : { row: directionY, square: directionX }
 }
+
+export const findCheckerByRowSquare = (checkerRow, checkerSquare, allCheckers) => {
+  return allCheckers.find(c => {
+    const { row, square } = c.position
+    return row === checkerRow && square === checkerSquare
+  })
+}
