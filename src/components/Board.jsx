@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 import { setCheckers } from '../store/gameSlice'
 import '../scss/board.scss'
 
-function Board() {
+function Board () {
 
   const iterateValue = 8
   const dispatch = useDispatch()
@@ -21,7 +21,7 @@ function Board() {
       {Array(iterateValue).fill('').map((row, rowIndex) => (
         <Row
           key={`row_${rowIndex}`}
-          rowIndex={rowIndex}
+          row={rowIndex}
           iterateValue={iterateValue}
         />
       ))}
