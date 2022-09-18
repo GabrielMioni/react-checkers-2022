@@ -44,9 +44,15 @@ function Square({ rowIndex, squareIndex }) {
     <div
       className={`square ${colorClass(rowIndex, squareIndex)}`}
       onClick={() => clickSquare(occupyingChecker)}>
-      { !occupyingChecker && `${rowIndex},${squareIndex}`}
-      { !occupyingChecker && occupyingMove && <AvailableMove/> }
-      { occupyingChecker && <Checker checker={occupyingChecker}/> }
+      { !occupyingChecker
+        && `${rowIndex},${squareIndex}`}
+      { !occupyingChecker
+        && occupyingMove
+        && <AvailableMove
+          row={rowIndex}
+          square={squareIndex} /> }
+      { occupyingChecker
+        && <Checker checker={occupyingChecker}/> }
     </div>
   );
 }
