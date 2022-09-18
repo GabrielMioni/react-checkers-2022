@@ -23,7 +23,14 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "array-callback-return": "off",
+      "indent": ["error", 2],
+      "object-curly-spacing": ["error", "always"],
+      "space-before-function-paren": "error",
+      "spaced-comment": "error"
+    }
   },
   "browserslist": {
     "production": [
