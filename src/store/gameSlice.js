@@ -4,7 +4,8 @@ export const gameSlice = createSlice({
   name: 'game',
   initialState: {
     checkers: [],
-    activeChecker: null
+    activeChecker: null,
+    availableMoves: null
   },
   reducers: {
     setCheckers: (state, action) => {
@@ -12,11 +13,14 @@ export const gameSlice = createSlice({
     },
     setActiveChecker: (state, actions) => {
       state.activeChecker = actions.payload
-    }
+    },
+    setAvailableMoves: (state, actions) => {
+      state.availableMoves = actions.payload
+    },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setCheckers, setActiveChecker } = gameSlice.actions
+export const { setCheckers, setActiveChecker, setAvailableMoves } = gameSlice.actions
 
 export default gameSlice.reducer
