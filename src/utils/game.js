@@ -35,12 +35,39 @@ export const initCheckers = (player, startRow) => {
 }
 
 export const findItemOccupyingSquare = (items, rowIndex, squareIndex) => {
+  if (!items) {
+    return
+  }
   const item = items.find(item => {
     const { row: rowPosition, square: squarePosition } = item.position
     return rowPosition === rowIndex && squarePosition === squareIndex
   })
 
   return item ? item : null
+}
+
+export const findMoveOccupyingSquare = (availableMoves, rowIndex, squareIndex) => {
+  if (!availableMoves) {
+    return
+  }
+  const result = Object.keys(availableMoves).map(key => {
+    const move = availableMoves[key]
+    if (!move) {
+      return false
+    }
+    const { row, square } = move
+    if (row === rowIndex && square === squareIndex) {
+      return  key
+    }
+    return false
+  }).filter(value => value)
+
+  if (result.length > 0) {
+    const key = result[0]
+    return  availableMoves[key]
+  }
+
+  return false
 }
 
 export const getAvailableMoves = ({ row, square }) => {
@@ -66,5 +93,9 @@ export const getAvailableMoves = ({ row, square }) => {
     b: setMove(up, right),
     c: setMove(down, right),
     d: setMove(down, left)
+    // a: { position: setMove(up, left) },
+    // b: { position: setMove(up, right) },
+    // c: { position: setMove(down, right) },
+    // d: { position: setMove(down, left) }
   }
 }
