@@ -5,7 +5,7 @@ export const isOdd = (number) => {
 export const setMove = (directionY, directionX) => {
   return directionY === null || directionX === null
     ? null
-    : { row: directionY, square: directionX }
+    : { row: directionY, square: directionX, kill: null }
 }
 
 export const findCheckerByRowSquare = (checkerRow, checkerSquare, allCheckers) => {
