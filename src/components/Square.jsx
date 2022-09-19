@@ -40,11 +40,11 @@ function Square ({ row, square }) {
       onClick={() => clickSquare(occupyingChecker)}>
       { !occupyingChecker
         && `${row},${square}`}
-      { !occupyingChecker
-        && occupyingMove
-        && <AvailableMove
+      { !occupyingChecker && occupyingMove &&
+        <AvailableMove
           row={row}
           square={square}
+          occupyingMove={occupyingMove}
         /> }
       { occupyingChecker
         && <Checker checker={occupyingChecker}/> }
