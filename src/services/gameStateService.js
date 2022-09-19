@@ -42,8 +42,8 @@ export const SetAvailableMoves = (row, square, allCheckers) => {
   store.dispatch(setAvailableMoves(moves))
 }
 
-export const SetCheckerMove = (row, square, activeChecker, allCheckers) => {
-  const updatedCheckers = getCheckersAfterMove(activeChecker, allCheckers, row, square)
+export const SetCheckerMove = (row, square, activeChecker, allCheckers, kill) => {
+  const updatedCheckers = getCheckersAfterMove(activeChecker, allCheckers, row, square, kill)
   store.dispatch(setCheckers(updatedCheckers))
   store.dispatch(setAvailableMoves(null))
 }
