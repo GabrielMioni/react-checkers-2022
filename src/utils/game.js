@@ -129,19 +129,24 @@ export const checkForOpponentNeighbors = (neighborSquares, checkers, activeCheck
 
     const occupyingCheckerTwo = getCheckerFromSquare(jumpRow, jumpSquare, checkers)
 
+    const occupyingCheckerId = occupyingChecker.id
+
     movesOut[key] = occupyingCheckerTwo
       ? null
-      : { row: jumpRow, square: jumpSquare }
+      : { row: jumpRow, square: jumpSquare, kill: occupyingCheckerId }
   })
 
   return movesOut
 }
 
-export const getCheckersAfterMove = (activeChecker, allCheckers, row, square) => {
+export const getCheckersAfterMove = (activeChecker, allCheckers, row, square, killId) => {
   const updatedChecker = { ...activeChecker }
   updatedChecker.position = { row, square }
 
-  const updatedCheckers = [...allCheckers]
+  let updatedCheckers = [...allCheckers]
+  if (killId) {
+    updatedCheckers = updatedCheckers.filter(checker => checker.id !== killId)
+  }
   const index = updatedCheckers.findIndex(checker => checker.id === updatedChecker.id)
   updatedCheckers.splice(index, 1, updatedChecker)
 
