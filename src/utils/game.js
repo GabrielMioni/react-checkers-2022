@@ -125,6 +125,9 @@ export const checkForOpponentNeighbors = (neighborSquares, checkers, activeCheck
 
     const opponentNeighbors = getNeighborSquares(occupyingChecker.position)
     const jumpMove = opponentNeighbors[key]
+    if (jumpMove === null) {
+      return
+    }
     const { row: jumpRow, square: jumpSquare } = jumpMove
 
     const occupyingCheckerTwo = getCheckerFromSquare(jumpRow, jumpSquare, checkers)
