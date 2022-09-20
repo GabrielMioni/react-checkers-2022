@@ -31,8 +31,13 @@ export const GetAvailableMoves = () => {
   return useSelector(state => state.game.availableMoves)
 }
 
+const SetClearMoves = () => {
+  store.dispatch(setAvailableMoves(null))
+}
+
 export const SetActiveChecker = (occupyingChecker) => {
   store.dispatch(setActiveChecker(occupyingChecker))
+  SetClearMoves()
 }
 
 export const SetAvailableMoves = (row, square, allCheckers) => {
@@ -45,5 +50,5 @@ export const SetAvailableMoves = (row, square, allCheckers) => {
 export const SetCheckerMove = (row, square, activeChecker, allCheckers, kill) => {
   const updatedCheckers = getCheckersAfterMove(activeChecker, allCheckers, row, square, kill)
   store.dispatch(setCheckers(updatedCheckers))
-  store.dispatch(setAvailableMoves(null))
+  SetClearMoves()
 }
