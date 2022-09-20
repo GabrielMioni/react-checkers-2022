@@ -5,20 +5,28 @@ import { isOdd } from '../utils/utils'
 import * as gameState from '../services/gameStateService'
 import '../scss/square.scss'
 
-const colorClass = (rowIndex, squareIndex) => {
-  const rowIndexIsOdd = isOdd(rowIndex)
-  const squareIndexIsOdd = isOdd(squareIndex)
+const colorClass = (row, square) => {
+  const rowIsOdd = isOdd(row)
+  const squareIsOdd = isOdd(square)
 
   const colorA = 'color-a'
   const colorB = 'color-b'
 
-  return rowIndexIsOdd
-    ? squareIndexIsOdd
+  return rowIsOdd
+    ? squareIsOdd
       ? colorA
       : colorB
-    : squareIndexIsOdd
+    : squareIsOdd
       ? colorB
       : colorA
+}
+
+const squareContent = (occupyingChecker, occupyingMove, row, square) => {
+  return occupyingChecker && !occupyingMove
+    ? <Checker checker={occupyingChecker} />
+    : !occupyingChecker && occupyingMove
+      ? <AvailableMove row={row} square={square} occupyingMove={occupyingMove} />
+      : `${row},${square}`
 }
 
 function Square ({ row, square }) {
@@ -38,16 +46,7 @@ function Square ({ row, square }) {
     <div
       className={`square ${colorClass(row, square)}`}
       onClick={() => clickSquare(occupyingChecker)}>
-      { !occupyingChecker
-        && `${row},${square}`}
-      { !occupyingChecker && occupyingMove &&
-        <AvailableMove
-          row={row}
-          square={square}
-          occupyingMove={occupyingMove}
-        /> }
-      { occupyingChecker
-        && <Checker checker={occupyingChecker}/> }
+      { squareContent(occupyingChecker, occupyingMove, row, square) }
     </div>
   );
 }
