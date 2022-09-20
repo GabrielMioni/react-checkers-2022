@@ -29,23 +29,24 @@ const squareContent = (occupyingChecker, occupyingMove, row, square) => {
       : `${row},${square}`
 }
 
+const clickSquare = (allCheckers, occupyingChecker, row, square) => {
+  gameState.SetActiveChecker(occupyingChecker)
+  if (occupyingChecker) {
+    gameState.SetAvailableMoves(row, square, allCheckers)
+  }
+}
+
 function Square ({ row, square }) {
   const occupyingChecker = gameState.GetCheckerInSquare(row, square)
   const occupyingMove = gameState.GetMoveInSquare(row, square)
 
   const allCheckers = gameState.GetAllCheckers()
 
-  const clickSquare = () => {
-    gameState.SetActiveChecker(occupyingChecker)
-    if (occupyingChecker) {
-      gameState.SetAvailableMoves(row, square, allCheckers)
-    }
-  }
-
   return (
     <div
       className={`square ${colorClass(row, square)}`}
-      onClick={() => clickSquare(occupyingChecker)}>
+      onClick={() => clickSquare(allCheckers, occupyingChecker, row, square)}
+    >
       { squareContent(occupyingChecker, occupyingMove, row, square) }
     </div>
   );
