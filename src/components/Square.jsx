@@ -22,9 +22,9 @@ const colorClass = (row, square) => {
 }
 
 const squareContent = (occupyingChecker, occupyingMove, row, square) => {
-  return occupyingChecker && !occupyingMove
+  return occupyingChecker
     ? <Checker checker={occupyingChecker} />
-    : !occupyingChecker && occupyingMove
+    : occupyingMove
       ? <AvailableMove row={row} square={square} occupyingMove={occupyingMove} />
       : `${row},${square}`
 }
