@@ -1,19 +1,14 @@
 import React, { useEffect } from 'react';
 import Row from './Row'
-import { initCheckers } from '../utils/game'
-import { useDispatch } from 'react-redux'
-import { setCheckers } from '../store/gameSlice'
+import { initCheckers } from '../services/gameStateService'
 import '../scss/board.scss'
 
 function Board () {
 
   const iterateValue = 8
-  const dispatch = useDispatch()
 
   useEffect(() => {
-    const checkersA = initCheckers('a', 0)
-    const checkersB = initCheckers('b', 5)
-    dispatch(setCheckers([...checkersA, ...checkersB]))
+    initCheckers()
   }, [])
 
   return (
