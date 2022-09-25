@@ -34,6 +34,13 @@ export const initCheckers = (player, startRow) => {
   return checkers
 }
 
+export const setPlayerCheckers = () => {
+  const checkersA = initCheckers('a', 0)
+  const checkersB = initCheckers('b', 5)
+
+  return [...checkersA, ...checkersB]
+}
+
 export const findItemOccupyingSquare = (items, rowIndex, squareIndex) => {
   if (!items) {
     return
