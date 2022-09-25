@@ -15,7 +15,7 @@ export const GetMoveInSquare = (row, square) => {
 
 export const GetCheckerInSquare = (row, square) => {
   const checkers = useSelector(state => state.game.checkers)
-  return game.findItemOccupyingSquare(checkers, row, square)
+  return game.findCheckerOccupyingSquare(checkers, row, square)
 }
 
 export const GetAllCheckers = () => {
