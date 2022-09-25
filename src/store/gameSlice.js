@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { setPlayerCheckers } from '../utils/game'
+import { createSlice, createSelector } from '@reduxjs/toolkit'
+import { setPlayerCheckers, getAvailableMoves } from '../utils/game'
 
 export const gameSlice = createSlice({
   name: 'game',
@@ -15,8 +15,17 @@ export const gameSlice = createSlice({
     setCheckers: (state, action) => {
       state.checkers = action.payload
     },
-    setActiveChecker: (state, actions) => {
-      state.activeChecker = actions.payload
+    setActiveChecker: (state, action) => {
+      const activeChecker = action.payload
+      if (!activeChecker) {
+        state.activeChecker = null
+        state.availableMoves = null
+        return
+      }
+      const moves = getAvailableMoves(activeChecker, state.checkers)
+
+      state.activeChecker = activeChecker
+      state.availableMoves = moves
     },
     setAvailableMoves: (state, actions) => {
       state.availableMoves = actions.payload
