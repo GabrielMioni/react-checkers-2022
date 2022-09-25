@@ -1,7 +1,7 @@
 import React from 'react';
 import '../scss/checker.scss'
 
-function Checker({ checker }) {
+function Checker ({ checker }) {
   const { row, square } = checker.position
 
   return (
