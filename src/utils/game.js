@@ -39,16 +39,16 @@ export const setPlayerCheckers = () => {
   return [...checkersA, ...checkersB]
 }
 
-export const findItemOccupyingSquare = (items, rowIndex, squareIndex) => {
-  if (!items) {
+export const findCheckerOccupyingSquare = (checkers, row, square) => {
+  if (!checkers) {
     return
   }
-  const item = items.find(item => {
+  const checker = checkers.find(item => {
     const { row: rowPosition, square: squarePosition } = item
-    return rowPosition === rowIndex && squarePosition === squareIndex
+    return rowPosition === row && squarePosition === square
   })
 
-  return item ? item : null
+  return checker ? checker : null
 }
 
 export const findMoveOccupyingSquare = (availableMoves, rowIndex, squareIndex) => {
@@ -75,7 +75,7 @@ export const findMoveOccupyingSquare = (availableMoves, rowIndex, squareIndex) =
   return false
 }
 
-export const getNeighborSquares = ({ row, square }) => {
+export const getNeighborSquares = (row, square) => {
   const directions = {
     up: row - 1,
     down: row + 1,
@@ -127,8 +127,9 @@ export const checkForOpponentNeighbors = (neighborSquares, checkers, activeCheck
       movesOut[key] = null
       return
     }
+    const { row: occupyingRow, square: occupyingSquare } = occupyingChecker
 
-    const opponentNeighbors = getNeighborSquares(occupyingChecker)
+    const opponentNeighbors = getNeighborSquares(occupyingRow, occupyingSquare)
     const jumpMove = opponentNeighbors[key]
     if (jumpMove === null) {
       return
@@ -145,6 +146,12 @@ export const checkForOpponentNeighbors = (neighborSquares, checkers, activeCheck
   })
 
   return movesOut
+}
+
+export const getAvailableMoves = (activeChecker, checkers) => {
+  const { row, square } = activeChecker
+  const neighborSquares = getNeighborSquares(row, square)
+  return checkForOpponentNeighbors(neighborSquares, checkers, activeChecker)
 }
 
 export const getCheckersAfterMove = (activeChecker, allCheckers, row, square, killId) => {
