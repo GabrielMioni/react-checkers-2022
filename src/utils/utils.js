@@ -10,7 +10,7 @@ export const setMove = (directionY, directionX) => {
 
 export const findCheckerByRowSquare = (checkerRow, checkerSquare, allCheckers) => {
   return allCheckers.find(c => {
-    const { row, square } = c.position
+    const { row, square } = c
     return row === checkerRow && square === checkerSquare
   })
 }

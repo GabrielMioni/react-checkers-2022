@@ -16,10 +16,8 @@ export const initCheckers = (player, startRow) => {
     const checkerObject = {
       player,
       id: `${player}${checkers.length}`,
-      position: {
-        row,
-        square
-      }
+      row,
+      square
     }
     checkers.push(checkerObject)
     square = square + 2
@@ -46,7 +44,7 @@ export const findItemOccupyingSquare = (items, rowIndex, squareIndex) => {
     return
   }
   const item = items.find(item => {
-    const { row: rowPosition, square: squarePosition } = item.position
+    const { row: rowPosition, square: squarePosition } = item
     return rowPosition === rowIndex && squarePosition === squareIndex
   })
 
@@ -105,7 +103,7 @@ export const getNeighborSquares = ({ row, square }) => {
 
 export const getCheckerFromSquare = (row, square, checkers) => {
   const found = checkers.find(checker => {
-    const { row: occupiedRow, square: occupiedSquare } = checker.position
+    const { row: occupiedRow, square: occupiedSquare } = checker
     return row === occupiedRow && square === occupiedSquare
   })
   return found ? found : null
@@ -130,7 +128,7 @@ export const checkForOpponentNeighbors = (neighborSquares, checkers, activeCheck
       return
     }
 
-    const opponentNeighbors = getNeighborSquares(occupyingChecker.position)
+    const opponentNeighbors = getNeighborSquares(occupyingChecker)
     const jumpMove = opponentNeighbors[key]
     if (jumpMove === null) {
       return
@@ -150,8 +148,7 @@ export const checkForOpponentNeighbors = (neighborSquares, checkers, activeCheck
 }
 
 export const getCheckersAfterMove = (activeChecker, allCheckers, row, square, killId) => {
-  const updatedChecker = { ...activeChecker }
-  updatedChecker.position = { row, square }
+  const updatedChecker = { ...activeChecker, row, square }
 
   let updatedCheckers = [...allCheckers]
   if (killId) {
