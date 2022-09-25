@@ -1,29 +1,40 @@
 .checker {
-  height: 85%;
-  width: 85%;
-  border-radius: 50%;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   color: white;
-  position: relative;
   cursor: pointer;
-
-  &:after {
-    position: absolute;
-    content: '';
-    border: 2px solid white;
+  &__piece {
+    height: 85%;
+    width: 85%;
     border-radius: 50%;
-    height: 70%;
-    width: 70%;
+    display: inherit;
+    align-items: inherit;
+    justify-content: inherit;
+    &:after {
+      position: absolute;
+      content: '';
+      border: 2px solid white;
+      border-radius: 50%;
+      height: 70%;
+      width: 70%;
+    }
   }
-
   &.player {
     &-a {
-      background-color: brown;
+      .checker__piece {
+        background-color: brown;
+      }
     }
     &-b {
-      background-color: black;
+      .checker__piece {
+        background: black;
+      }
     }
   }
 }

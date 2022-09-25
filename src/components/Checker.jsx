@@ -6,7 +6,9 @@ function Checker ({ checker }) {
 
   return (
     <div className={`checker player-${checker.player}`}>
-      {`${row},${square}`}
+      <div className="checker__piece">
+        {`${row},${square}`}
+      </div>
     </div>
   );
 }
