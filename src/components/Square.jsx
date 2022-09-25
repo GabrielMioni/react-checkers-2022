@@ -1,6 +1,6 @@
 import React from 'react';
 import Checker from './Checker'
-import AvailableMove from './AvailableMove'
+import Move from './Move'
 import { isOdd } from '../utils/utils'
 import * as gameState from '../services/gameStateService'
 import '../scss/square.scss'
@@ -25,7 +25,7 @@ const squareContent = (occupyingChecker, occupyingMove, row, square) => {
   return occupyingChecker
     ? <Checker checker={occupyingChecker} />
     : occupyingMove
-      ? <AvailableMove row={row} square={square} occupyingMove={occupyingMove} />
+      ? <Move row={row} square={square} occupyingMove={occupyingMove} />
       : `${row},${square}`
 }
 

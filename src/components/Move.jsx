@@ -2,7 +2,7 @@ import React from 'react';
 import * as gameState from '../services/gameStateService' 
 import '../scss/available-move.scss'
 
-function AvailableMove ({ row, square, occupyingMove }) {
+function Move ({ row, square, occupyingMove }) {
   const activeChecker = gameState.GetActiveChecker()
   const allCheckers = gameState.GetAllCheckers()
   const kill = occupyingMove.kill
@@ -14,4 +14,4 @@ function AvailableMove ({ row, square, occupyingMove }) {
   );
 }
 
-export default AvailableMove;
+export default Move;
