@@ -2,7 +2,7 @@ import './App.css';
 import Board from './components/Board'
 import './scss/app.scss'
 
-function App() {
+function App () {
   return (
     <div className="container">
       <Board />
