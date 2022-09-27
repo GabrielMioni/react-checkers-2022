@@ -1,10 +1,17 @@
 import { isOdd, setMove } from './utils'
 
+export const setPlayerCheckers = () => {
+  const checkersA = initCheckers('a', 0)
+  const checkersB = initCheckers('b', 5)
+
+  return [...checkersA, ...checkersB]
+}
+
 const setInitialSquarePosition = (row) => {
   return isOdd(row) ? 0 : 1
 }
 
-export const initCheckers = (player, startRow) => {
+const initCheckers = (player, startRow) => {
   const checkers = []
 
   let row = startRow
@@ -30,13 +37,6 @@ export const initCheckers = (player, startRow) => {
   }
 
   return checkers
-}
-
-export const setPlayerCheckers = () => {
-  const checkersA = initCheckers('a', 0)
-  const checkersB = initCheckers('b', 5)
-
-  return [...checkersA, ...checkersB]
 }
 
 export const findCheckerOccupyingSquare = (checkers, row, square) => {
@@ -75,7 +75,13 @@ export const findMoveOccupyingSquare = (availableMoves, rowIndex, squareIndex) =
   return false
 }
 
-export const getNeighborSquares = (row, square) => {
+export const getAvailableMoves = (activeChecker, checkers) => {
+  const { row, square } = activeChecker
+  const neighborSquares = getNeighborSquares(row, square)
+  return checkForOpponentNeighbors(neighborSquares, checkers, activeChecker)
+}
+
+const getNeighborSquares = (row, square) => {
   const directions = {
     up: row - 1,
     down: row + 1,
@@ -101,15 +107,7 @@ export const getNeighborSquares = (row, square) => {
   }
 }
 
-export const getCheckerFromSquare = (row, square, checkers) => {
-  const found = checkers.find(checker => {
-    const { row: occupiedRow, square: occupiedSquare } = checker
-    return row === occupiedRow && square === occupiedSquare
-  })
-  return found ? found : null
-}
-
-export const checkForOpponentNeighbors = (neighborSquares, checkers, activeChecker) => {
+const checkForOpponentNeighbors = (neighborSquares, checkers, activeChecker) => {
   const movesOut = { ...neighborSquares }
 
   Object.keys(neighborSquares).map(key => {
@@ -148,10 +146,12 @@ export const checkForOpponentNeighbors = (neighborSquares, checkers, activeCheck
   return movesOut
 }
 
-export const getAvailableMoves = (activeChecker, checkers) => {
-  const { row, square } = activeChecker
-  const neighborSquares = getNeighborSquares(row, square)
-  return checkForOpponentNeighbors(neighborSquares, checkers, activeChecker)
+const getCheckerFromSquare = (row, square, checkers) => {
+  const found = checkers.find(checker => {
+    const { row: occupiedRow, square: occupiedSquare } = checker
+    return row === occupiedRow && square === occupiedSquare
+  })
+  return found ? found : null
 }
 
 export const getCheckersAfterMove = (move, activeChecker, checkers) => {
