@@ -27,7 +27,7 @@ const squareContent = (occupyingChecker, occupyingMove, row, square) => {
   return occupyingChecker
     ? <Checker checker={occupyingChecker} />
     : occupyingMove
-      ? <Move row={row} square={square} occupyingMove={occupyingMove} />
+      ? <Move occupyingMove={occupyingMove} />
       : `${row},${square}`
 }
 

@@ -1,15 +1,17 @@
 import React from 'react';
-import * as gameState from '../services/gameStateService' 
+import { setCheckerMoved } from '../store/gameSlice'
 import '../scss/available-move.scss'
+import store from '../store'
 
-function Move ({ row, square, occupyingMove }) {
-  const activeChecker = gameState.GetActiveChecker()
-  const allCheckers = gameState.GetAllCheckers()
-  const kill = occupyingMove.kill
+const clickMove = (occupyingMove) => {
+  store.dispatch(setCheckerMoved(occupyingMove))
+}
+
+function Move ({ occupyingMove }) {
   return (
     <div
       className="available-move"
-      onClick={() => gameState.SetCheckerMove(row, square, activeChecker, allCheckers, kill)}
+      onClick={() => clickMove(occupyingMove)}
     />
   );
 }
