@@ -1,6 +1,6 @@
 import React from 'react';
 import { setCheckerMoved } from '../store/gameSlice'
-import '../scss/available-move.scss'
+import '../scss/move.scss'
 import store from '../store'
 
 const clickMove = (occupyingMove) => {
@@ -10,7 +10,7 @@ const clickMove = (occupyingMove) => {
 function Move ({ occupyingMove }) {
   return (
     <div
-      className="available-move"
+      className="move"
       onClick={() => clickMove(occupyingMove)}
     />
   );
