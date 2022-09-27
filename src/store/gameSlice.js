@@ -1,5 +1,5 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit'
-import { setPlayerCheckers, getAvailableMoves } from '../utils/game'
+import { setPlayerCheckers, getAvailableMoves, findCheckerOccupyingSquare, findMoveOccupyingSquare } from '../utils/game'
 
 export const gameSlice = createSlice({
   name: 'game',
@@ -37,3 +37,12 @@ export const gameSlice = createSlice({
 export const { setGame, setCheckers, setActiveChecker, setAvailableMoves } = gameSlice.actions
 
 export default gameSlice.reducer
+
+// Selectors
+export const squareHasChecker = (checkers, row, square) => {
+  return findCheckerOccupyingSquare(checkers, row, square)
+}
+
+export const squareHasMove = (availableMoves, row, square) => {
+  return findMoveOccupyingSquare(availableMoves, row, square)
+}
