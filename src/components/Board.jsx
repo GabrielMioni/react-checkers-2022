@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Row from './Row'
-import { initCheckers } from '../services/gameStateService'
+import store from '../store'
+import { setGame } from '../store/gameSlice'
 import '../scss/board.scss'
 
 function Board () {
@@ -8,7 +9,7 @@ function Board () {
   const iterateValue = 8
 
   useEffect(() => {
-    initCheckers()
+    store.dispatch(setGame())
   }, [])
 
   return (
