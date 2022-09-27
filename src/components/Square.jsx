@@ -36,8 +36,8 @@ const clickSquare = () => {
 }
 
 function Square ({ row, square }) {
-  const moves = useSelector(state => state.game.availableMoves)
   const checkers = useSelector(state => state.game.checkers)
+  const moves = useSelector(state => state.game.availableMoves)
 
   const occupyingChecker = squareHasChecker(checkers, row, square)
   const occupyingMove = squareHasMove(moves, row, square)
