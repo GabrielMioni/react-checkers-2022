@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import * as gameLogic from '../utils/game'
+import * as gameService from '../services/gameService'
 
 export const gameSlice = createSlice({
   name: 'game',
@@ -10,7 +10,7 @@ export const gameSlice = createSlice({
   },
   reducers: {
     setGame: (state, action) => {
-      state.checkers = gameLogic.setPlayerCheckers()
+      state.checkers = gameService.setPlayerCheckers()
     },
     setActiveChecker: (state, action) => {
       const activeChecker = action.payload
@@ -28,7 +28,7 @@ export const gameSlice = createSlice({
           return
         }
       }
-      const moves = gameLogic.getAvailableMoves(activeChecker, state.checkers)
+      const moves = gameService.getAvailableMoves(activeChecker, state.checkers)
 
       state.activeChecker = activeChecker
       state.availableMoves = moves
@@ -36,7 +36,7 @@ export const gameSlice = createSlice({
     setCheckerMoved: (state, action) => {
       const move = action.payload
       const { activeChecker, checkers } = state
-      state.checkers = gameLogic.getCheckersAfterMove(move, activeChecker, checkers)
+      state.checkers = gameService.getCheckersAfterMove(move, activeChecker, checkers)
     }
   },
 })
@@ -48,9 +48,9 @@ export default gameSlice.reducer
 
 // Selectors
 export const squareHasChecker = (checkers, row, square) => {
-  return gameLogic.findCheckerOccupyingSquare(checkers, row, square)
+  return gameService.findCheckerOccupyingSquare(checkers, row, square)
 }
 
 export const squareHasMove = (availableMoves, row, square) => {
-  return gameLogic.findMoveOccupyingSquare(availableMoves, row, square)
+  return gameService.findMoveOccupyingSquare(availableMoves, row, square)
 }

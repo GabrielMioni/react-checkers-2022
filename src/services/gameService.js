@@ -1,4 +1,4 @@
-import { isOdd, setMove } from './utils'
+import { isOdd, setMove } from '../utils/utils'
 
 export const setPlayerCheckers = () => {
   const checkersA = initCheckers('a', 0)
