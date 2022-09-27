@@ -22,6 +22,15 @@ export const gameSlice = createSlice({
         state.availableMoves = null
         return
       }
+      if (state.activeChecker) {
+        const { row: activeRow, square: activeSquare } = state.activeChecker
+        const { row: newRow, square: newSquare } = activeChecker
+        if (activeRow === newRow && activeSquare === newSquare) {
+          state.activeChecker = null
+          state.availableMoves = null
+          return
+        }
+      }
       const moves = getAvailableMoves(activeChecker, state.checkers)
 
       state.activeChecker = activeChecker
