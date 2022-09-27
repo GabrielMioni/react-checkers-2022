@@ -154,15 +154,11 @@ export const getAvailableMoves = (activeChecker, checkers) => {
   return checkForOpponentNeighbors(neighborSquares, checkers, activeChecker)
 }
 
-export const getCheckersAfterMove = (activeChecker, allCheckers, row, square, killId) => {
+export const getCheckersAfterMove = (move, activeChecker, checkers) => {
+  const { row, square, kill } = move
   const updatedChecker = { ...activeChecker, row, square }
 
-  let updatedCheckers = [...allCheckers]
-  if (killId) {
-    updatedCheckers = updatedCheckers.filter(checker => checker.id !== killId)
-  }
-  const index = updatedCheckers.findIndex(checker => checker.id === updatedChecker.id)
-  updatedCheckers.splice(index, 1, updatedChecker)
-
-  return updatedCheckers
+  return checkers
+    .map(checker => checker.id === updatedChecker.id ? updatedChecker : checker)
+    .filter(checker => kill ? checker.id !== kill : true)
 }
