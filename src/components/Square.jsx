@@ -2,8 +2,10 @@ import React from 'react';
 import Checker from './Checker'
 import Move from './Move'
 import { isOdd } from '../utils/utils'
-import * as gameState from '../services/gameStateService'
+import { setActiveChecker, squareHasChecker, squareHasMove } from '../store/gameSlice'
+import { useSelector } from 'react-redux'
 import '../scss/square.scss'
+import store from '../store'
 
 const colorClass = (row, square) => {
   const rowIsOdd = isOdd(row)
@@ -29,23 +31,21 @@ const squareContent = (occupyingChecker, occupyingMove, row, square) => {
       : `${row},${square}`
 }
 
-const clickSquare = (allCheckers, occupyingChecker, row, square) => {
-  gameState.SetActiveChecker(occupyingChecker)
-  if (occupyingChecker) {
-    gameState.SetAvailableMoves(row, square, allCheckers)
-  }
+const clickSquare = () => {
+  store.dispatch(setActiveChecker(null))
 }
 
 function Square ({ row, square }) {
-  const occupyingChecker = gameState.GetCheckerInSquare(row, square)
-  const occupyingMove = gameState.GetMoveInSquare(row, square)
+  const moves = useSelector(state => state.game.availableMoves)
+  const checkers = useSelector(state => state.game.checkers)
 
-  const allCheckers = gameState.GetAllCheckers()
+  const occupyingChecker = squareHasChecker(checkers, row, square)
+  const occupyingMove = squareHasMove(moves, row, square)
 
   return (
     <div
       className={`square ${colorClass(row, square)}`}
-      onClick={() => clickSquare(allCheckers, occupyingChecker, row, square)}
+      onClick={() => clickSquare()}
     >
       { squareContent(occupyingChecker, occupyingMove, row, square) }
     </div>
