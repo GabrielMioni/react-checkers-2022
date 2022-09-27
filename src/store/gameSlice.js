@@ -18,9 +18,6 @@ export const gameSlice = createSlice({
     setGame: (state, action) => {
       state.checkers = setPlayerCheckers()
     },
-    setCheckers: (state, action) => {
-      state.checkers = action.payload
-    },
     setActiveChecker: (state, action) => {
       const activeChecker = action.payload
       if (!activeChecker) {
@@ -42,9 +39,6 @@ export const gameSlice = createSlice({
       state.activeChecker = activeChecker
       state.availableMoves = moves
     },
-    setAvailableMoves: (state, actions) => {
-      state.availableMoves = actions.payload
-    },
     setCheckerMoved: (state, action) => {
       const move = action.payload
       const { activeChecker, checkers } = state
@@ -54,7 +48,7 @@ export const gameSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setGame, setCheckers, setActiveChecker, setAvailableMoves, setCheckerMoved } = gameSlice.actions
+export const { setGame, setActiveChecker, setCheckerMoved } = gameSlice.actions
 
 export default gameSlice.reducer
 
