@@ -16,6 +16,11 @@ export const gameSlice = createSlice({
     },
     setActiveChecker: (state, action) => {
       const activeChecker = action.payload
+
+      if (activeChecker.player !== state.currentPlayer) {
+        return
+      }
+
       if (!activeChecker) {
         state.activeChecker = null
         state.availableMoves = null
@@ -39,6 +44,16 @@ export const gameSlice = createSlice({
       const { activeChecker, checkers } = state
       state.checkers = gameService.getCheckersAfterMove(move, activeChecker, checkers)
       state.availableMoves = null
+      state.activeChecker = null
+
+      const additionalJumps = gameService.additionalJumps(move, state.checkers)
+      if (additionalJumps) {
+        state.availableMoves = additionalJumps
+        return
+      }
+      state.currentPlayer = state.currentPlayer === players.a
+        ? players.b
+        : players.a
     }
   },
 })
