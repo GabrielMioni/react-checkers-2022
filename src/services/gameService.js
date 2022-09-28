@@ -115,6 +115,14 @@ export const additionalJumps = (move, checkers) => {
   return result.length > 0 ? additionalMoves : null
 }
 
+export const getCheckerById = (id, checkers, props = null) => {
+  const checker = checkers.find(checker => checker.id === id)
+  if (!checker) {
+    return null
+  }
+  return props ? { ...checker, ...props } : checker
+}
+
 const getNeighborSquares = (row, square) => {
   const directions = {
     up: row - 1,

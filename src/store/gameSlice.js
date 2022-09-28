@@ -48,6 +48,8 @@ export const gameSlice = createSlice({
 
       const additionalJumps = gameService.additionalJumps(move, state.checkers)
       if (additionalJumps) {
+        const { row, square } = move
+        state.activeChecker = gameService.getCheckerById(activeChecker.id, checkers, { row, square })
         state.availableMoves = additionalJumps
         return
       }
