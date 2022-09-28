@@ -3,7 +3,8 @@ import { setCheckerMoved } from '../store/gameSlice'
 import '../scss/move.scss'
 import store from '../store'
 
-const clickMove = (occupyingMove) => {
+const clickMove = (event, occupyingMove) => {
+  event.stopPropagation()
   store.dispatch(setCheckerMoved(occupyingMove))
 }
 
@@ -11,7 +12,7 @@ function Move ({ occupyingMove }) {
   return (
     <div
       className="move"
-      onClick={() => clickMove(occupyingMove)}
+      onClick={e => clickMove(e, occupyingMove)}
     />
   );
 }
