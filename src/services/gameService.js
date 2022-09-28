@@ -24,7 +24,8 @@ const initCheckers = (player, startRow) => {
       player,
       id: `${player}${checkers.length}`,
       row,
-      square
+      square,
+      isKing: false
     }
     checkers.push(checkerObject)
     square = square + 2
@@ -76,9 +77,15 @@ export const findMoveOccupyingSquare = (availableMoves, rowIndex, squareIndex) =
 }
 
 export const getAvailableMoves = (activeChecker, checkers) => {
-  const { row, square } = activeChecker
+  const { isKing, player, row, square } = activeChecker
   const neighborSquares = getNeighborSquares(row, square)
-  return checkForOpponentNeighbors(neighborSquares, checkers, activeChecker)
+  const moves = checkForOpponentNeighbors(neighborSquares, checkers, activeChecker)
+
+  return isKing
+    ? moves
+    : player === 'a'
+      ? { ...moves, a: null, b: null }
+      : { ...moves, c: null, d: null }
 }
 
 const getNeighborSquares = (row, square) => {
