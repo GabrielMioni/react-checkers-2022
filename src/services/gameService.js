@@ -165,7 +165,16 @@ export const getCheckersAfterMove = (move, activeChecker, checkers) => {
   const { row, square, kill } = move
   const updatedChecker = { ...activeChecker, row, square }
 
+  if (checkerShouldBeKinged(activeChecker, row)) {
+    updatedChecker.isKing = true
+  }
+
   return checkers
     .map(checker => checker.id === updatedChecker.id ? updatedChecker : checker)
     .filter(checker => kill ? checker.id !== kill : true)
+}
+
+const checkerShouldBeKinged = (checker, row) => {
+  const { player, isKing } = checker
+  return !isKing && ((player === 'a' && row === 7) || (player === 'b' && row === 0))
 }
