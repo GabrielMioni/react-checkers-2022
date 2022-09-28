@@ -1,12 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
 import * as gameService from '../services/gameService'
+import { players } from '../services/players'
 
 export const gameSlice = createSlice({
   name: 'game',
   initialState: {
     checkers: [],
     activeChecker: null,
-    availableMoves: null
+    availableMoves: null,
+    currentPlayer: players.a
   },
   reducers: {
     setGame: (state, action) => {
@@ -41,7 +43,6 @@ export const gameSlice = createSlice({
   },
 })
 
-// Action creators are generated for each case reducer function
 export const { setGame, setActiveChecker, setCheckerMoved } = gameSlice.actions
 
 export default gameSlice.reducer
