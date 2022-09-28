@@ -8,7 +8,8 @@ export const gameSlice = createSlice({
     checkers: [],
     activeChecker: null,
     availableMoves: null,
-    currentPlayer: players.a
+    currentPlayer: players.a,
+    winner: null
   },
   reducers: {
     setGame: (state, action) => {
@@ -51,6 +52,14 @@ export const gameSlice = createSlice({
         state.availableMoves = additionalJumps
         return
       }
+      const playerWon = gameService.playerWon(state.currentPlayer, state.checkers)
+
+      if (playerWon) {
+        state.winner = state.currentPlayer
+        console.log(`Player ${state.currentPlayer} won!`)
+        return
+      }
+
       state.currentPlayer = state.currentPlayer === players.a
         ? players.b
         : players.a

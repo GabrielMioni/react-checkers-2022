@@ -213,3 +213,7 @@ const checkerShouldBeKinged = (checker, row) => {
   const { player, isKing } = checker
   return !isKing && ((player === 'a' && row === 7) || (player === 'b' && row === 0))
 }
+
+export const playerWon = (player, checkers) => {
+  return  checkers.filter(checker => checker.player !== player).length <= 0
+}
