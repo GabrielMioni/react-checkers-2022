@@ -89,6 +89,32 @@ export const getAvailableMoves = (activeChecker, checkers) => {
       : { ...moves, c: null, d: null }
 }
 
+export const additionalJumps = (move, checkers) => {
+  const { row, square, kill } = move
+  if (!kill) {
+    return null
+  }
+  const activeChecker = checkers.find(checker => {
+    const { row: checkerRow, square: checkerSquare } = checker
+    return row === checkerRow && square === checkerSquare
+  })
+  if (!activeChecker) {
+    return
+  }
+
+  const additionalMoves = getAvailableMoves(activeChecker, checkers)
+
+  const result = Object.keys(additionalMoves).map(key => {
+    if (!additionalMoves[key]?.kill) {
+      additionalMoves[key] = null
+    } else {
+      return true
+    }
+  }).filter(move => move)
+
+  return result.length > 0 ? additionalMoves : null
+}
+
 const getNeighborSquares = (row, square) => {
   const directions = {
     up: row - 1,
