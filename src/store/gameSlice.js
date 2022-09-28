@@ -16,14 +16,12 @@ export const gameSlice = createSlice({
     },
     setActiveChecker: (state, action) => {
       const activeChecker = action.payload
-
-      if (activeChecker.player !== state.currentPlayer) {
-        return
-      }
-
       if (!activeChecker) {
         state.activeChecker = null
         state.availableMoves = null
+        return
+      }
+      if (activeChecker.player !== state.currentPlayer) {
         return
       }
       if (state.activeChecker) {
