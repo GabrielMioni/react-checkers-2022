@@ -36,6 +36,7 @@ export const gameSlice = createSlice({
       const move = action.payload
       const { activeChecker, checkers } = state
       state.checkers = gameService.getCheckersAfterMove(move, activeChecker, checkers)
+      state.availableMoves = null
     }
   },
 })
