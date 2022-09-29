@@ -63,11 +63,15 @@ export const gameSlice = createSlice({
       state.currentPlayer = state.currentPlayer === players.a
         ? players.b
         : players.a
+    },
+    resetGame: (state, action) => {
+      state.checkers = gameService.setPlayerCheckers()
+      state.winner = null
     }
   },
 })
 
-export const { setGame, setActiveChecker, setCheckerMoved } = gameSlice.actions
+export const { setGame, setActiveChecker, setCheckerMoved, resetGame } = gameSlice.actions
 
 export default gameSlice.reducer
 
