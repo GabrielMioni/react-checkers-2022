@@ -9,7 +9,7 @@ const renderToolbar = (toolbar) => {
 }
 
 function Card ({ children, height, width, toolbar }) {
-  const setHeight = height || '500px'
+  const setHeight = height || '250px'
   const setWidth = width || '200px'
 
   return (
