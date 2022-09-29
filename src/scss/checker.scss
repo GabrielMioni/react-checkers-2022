@@ -16,6 +16,10 @@
     display: inherit;
     align-items: inherit;
     justify-content: inherit;
+    img {
+      height: 50%;
+      width: 50%;
+    }
     &:after {
       position: absolute;
       content: '';
