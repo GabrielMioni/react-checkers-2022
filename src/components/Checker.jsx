@@ -9,13 +9,10 @@ const clickChecker = (event, checker) => {
   store.dispatch(setActiveChecker(checker))
 }
 
-const renderCheckerContent = (isKing) => {
-  if (!isKing)
-    return null
-
-  return (
-    <img src={crown} alt="crown"/>
-  )
+const renderCheckerContent = (isKing, row, square) => {
+  return isKing
+    ? <img src={crown} alt="crown"/>
+    : `${row},${square}`
 }
 
 function Checker ({ checker }) {
@@ -26,8 +23,7 @@ function Checker ({ checker }) {
       className={`checker player-${player}`}
       onClick={e => clickChecker(e, checker)}>
       <div className="checker__piece">
-        { isKing && <img src={crown} alt="crown"/> }
-        { !isKing && `${row},${square}`}
+        { renderCheckerContent(isKing, row, square) }
       </div>
     </div>
   );
