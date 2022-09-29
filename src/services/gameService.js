@@ -2,8 +2,8 @@ import { isOdd, setMove } from '../utils/utils'
 import { players } from './players'
 
 export const setPlayerCheckers = () => {
-  const checkersA = initCheckers(players.a, 0)
-  const checkersB = initCheckers(players.b, 5)
+  const checkersA = initCheckers(players.a, 5)
+  const checkersB = initCheckers(players.b, 0)
 
   return [...checkersA, ...checkersB]
 }
@@ -85,8 +85,8 @@ export const getAvailableMoves = (activeChecker, checkers) => {
   return isKing
     ? moves
     : player === players.a
-      ? { ...moves, a: null, b: null }
-      : { ...moves, c: null, d: null }
+      ? { ...moves, c: null, d: null }
+      : { ...moves, a: null, b: null }
 }
 
 export const additionalJumps = (move, checkers) => {
@@ -211,7 +211,7 @@ export const getCheckersAfterMove = (move, activeChecker, checkers) => {
 
 const checkerShouldBeKinged = (checker, row) => {
   const { player, isKing } = checker
-  return !isKing && ((player === 'a' && row === 7) || (player === 'b' && row === 0))
+  return !isKing && ((player === 'a' && row === 0) || (player === 'b' && row === 7))
 }
 
 export const playerWon = (player, checkers) => {
