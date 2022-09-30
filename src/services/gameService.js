@@ -1,5 +1,6 @@
 import { isOdd, setMove } from '../utils/utils'
 import { players } from './players'
+import { movementIds } from './movementIds'
 
 export const setPlayerCheckers = () => {
   const checkersA = initCheckers(players.a, 5)
@@ -142,10 +143,10 @@ const getNeighborSquares = (row, square) => {
   const { up, down, left, right } = directions
 
   return {
-    a: setMove(up, left, 'a'),
-    b: setMove(up, right, 'b'),
-    c: setMove(down, right, 'c'),
-    d: setMove(down, left, 'd')
+    a: setMove(up, left, movementIds.a),
+    b: setMove(up, right, movementIds.b),
+    c: setMove(down, right, movementIds.c),
+    d: setMove(down, left, movementIds.d)
   }
 }
 
@@ -182,7 +183,7 @@ const checkForOpponentNeighbors = (neighborSquares, checkers, activeChecker) => 
 
     movesOut[key] = occupyingCheckerTwo
       ? null
-      : { row: jumpRow, square: jumpSquare, kill: occupyingCheckerId }
+      : { row: jumpRow, square: jumpSquare, kill: occupyingCheckerId, movementId: key }
   })
 
   return movesOut
