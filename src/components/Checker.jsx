@@ -22,9 +22,13 @@ const buildCheckerClasses = (checker, activeChecker, selectedMove) => {
   const classes = [`checker player-${player}`]
   const isActive = id === activeChecker?.id
 
+  if (!selectedMove && isActive) {
+    classes.push('active')
+  }
+
   if (selectedMove && isActive) {
     const { movementId, kill } = selectedMove
-    classes.push(`active moving-${movementId}${kill ? ' jump' : ''}`)
+    classes.push(`moving-${movementId}${kill ? ' jump' : ''}`)
   }
 
   return  classes.join(' ')
