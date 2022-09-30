@@ -30,41 +30,6 @@
       width: 70%;
     }
   }
-  &.moving {
-    transition: left 150ms linear, top 150ms linear;
-    &.a {
-      top: -100%;
-      left: -100%;
-      &.jump {
-        top: -200%;
-        left: -200%;
-      }
-    }
-    &.b {
-      top: -100%;
-      left: 100%;
-      &.jump {
-        top: -200%;
-        left: 200%;
-      }
-    }
-    &.c {
-      top: 100%;
-      left: 100%;
-      &.jump {
-        top: 200%;
-        left: 200%;
-      }
-    }
-    &.d {
-      top: 100%;
-      left: -100%;
-      &.jump {
-        top: 200%;
-        left: -200%;
-      }
-    }
-  }
   &.player {
     &-a {
       .checker__piece {
@@ -76,5 +41,117 @@
         background: black;
       }
     }
+  }
+  &.moving-a {
+    animation: move-a 150ms forwards;
+    &.jump {
+      animation: move-a-jump 150ms forwards;
+    }
+  }
+  &.moving-b {
+    animation: move-b 150ms forwards;
+    &.jump {
+      animation: move-b-jump 150ms forwards;
+    }
+  }
+  &.moving-c {
+    animation: move-c 150ms forwards;
+    &.jump {
+      animation: move-c-jump 150ms forwards;
+    }
+  }
+  &.moving-d {
+    animation: move-d 150ms forwards;
+    &.jump {
+      animation: move-d-jump 150ms forwards;
+    }
+  }
+}
+
+@keyframes move-a {
+  0% {
+    top: 0;
+    left: 0;
+  }
+  100% {
+    top: -100%;
+    left: -100%;
+  }
+}
+
+@keyframes move-a-jump {
+  0% {
+    top: 0;
+    left: 0;
+  }
+  100% {
+    top: -200%;
+    left: -200%;
+  }
+}
+
+@keyframes move-b {
+  0% {
+    top: 0;
+    left: 0;
+  }
+  100% {
+    top: -100%;
+    left: 100%;
+  }
+}
+
+@keyframes move-b-jump {
+  0% {
+    top: 0;
+    left: 0;
+  }
+  100% {
+    top: -200%;
+    left: 200%;
+  }
+}
+
+@keyframes move-c {
+  0% {
+    top: 0;
+    left: 0;
+  }
+  100% {
+    top: 100%;
+    left: 100%;
+  }
+}
+
+@keyframes move-c-jump {
+  0% {
+    top: 0;
+    left: 0;
+  }
+  100% {
+    top: 200%;
+    left: 200%;
+  }
+}
+
+@keyframes move-d {
+  0% {
+    top: 0;
+    left: 0;
+  }
+  100% {
+    top: 100%;
+    left: -100%;
+  }
+}
+
+@keyframes move-d-jump {
+  0% {
+    top: 0;
+    left: 0;
+  }
+  100% {
+    top: 200%;
+    left: -200%;
   }
 }
