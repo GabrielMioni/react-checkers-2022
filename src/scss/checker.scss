@@ -30,6 +30,10 @@
       width: 70%;
     }
   }
+  &.active {
+    background: rgba(221,160,221, 0.5);
+    box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 1);
+  }
   &.player {
     &-a {
       .checker__piece {
