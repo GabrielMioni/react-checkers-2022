@@ -18,28 +18,16 @@ const renderCheckerContent = (isKing, row, square) => {
 
 const buildCheckerClasses = (checker, activeChecker, selectedMove) => {
   const { id, player } = checker
-  const activeId = activeChecker?.id
 
-  const isActive = id === activeId
+  const classes = [`checker player-${player}`]
+  const isActive = id === activeChecker?.id
 
-  let classesString = `checker player-${player}`
-  if (isActive) {
-    classesString += ' active'
-  }
-
-  if (!isActive) {
-    return classesString
-  }
-
-  if (selectedMove) {
+  if (selectedMove && isActive) {
     const { movementId, kill } = selectedMove
-    classesString += ` moving-${movementId}`
-    if (kill) {
-      classesString += ' jump'
-    }
+    classes.push(`active moving-${movementId}${kill ? ' jump' : ''}`)
   }
 
-  return classesString
+  return  classes.join(' ')
 }
 
 function Checker ({ checker }) {
