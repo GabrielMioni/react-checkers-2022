@@ -9,6 +9,7 @@
   justify-content: center;
   color: white;
   cursor: pointer;
+  z-index: 1;
   &__piece {
     height: 85%;
     width: 85%;
@@ -27,6 +28,41 @@
       border-radius: 50%;
       height: 70%;
       width: 70%;
+    }
+  }
+  &.moving {
+    transition: left 150ms linear, top 150ms linear;
+    &.a {
+      top: -100%;
+      left: -100%;
+      &.jump {
+        top: -200%;
+        left: -200%;
+      }
+    }
+    &.b {
+      top: -100%;
+      left: 100%;
+      &.jump {
+        top: -200%;
+        left: 200%;
+      }
+    }
+    &.c {
+      top: 100%;
+      left: 100%;
+      &.jump {
+        top: 200%;
+        left: 200%;
+      }
+    }
+    &.d {
+      top: 100%;
+      left: -100%;
+      &.jump {
+        top: 200%;
+        left: -200%;
+      }
     }
   }
   &.player {
