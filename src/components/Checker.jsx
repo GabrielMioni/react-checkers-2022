@@ -42,10 +42,6 @@ const buildCheckerClasses = (checker, activeChecker, selectedMove) => {
   return classesString
 }
 
-const animationEnd = () => {
-  store.dispatch(setCheckerMoved())
-}
-
 function Checker ({ checker }) {
   const { row, square, isKing } = checker
 
@@ -56,7 +52,7 @@ function Checker ({ checker }) {
     <div
       className={buildCheckerClasses(checker, activeChecker, selectedMove )}
       onClick={e => clickChecker(e, checker)}
-      onAnimationEnd={() => animationEnd()}>
+      onAnimationEnd={() => store.dispatch(setCheckerMoved())}>
       <div className="checker__piece">
         { renderCheckerContent(isKing, row, square) }
       </div>
