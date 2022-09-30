@@ -8,6 +8,7 @@ export const gameSlice = createSlice({
     checkers: [],
     activeChecker: null,
     availableMoves: null,
+    selectedMove: null,
     currentPlayer: players.a,
     winner: null
   },
@@ -38,17 +39,22 @@ export const gameSlice = createSlice({
       state.activeChecker = activeChecker
       state.availableMoves = gameService.getAvailableMoves(activeChecker, state.checkers)
     },
+    setSelectedMove: (state, action) => {
+      state.selectedMove = action.payload
+    },
     setCheckerMoved: (state, action) => {
-      const move = action.payload
+      const move = state.selectedMove
       const { activeChecker, checkers } = state
+
+      state.selectedMove = null
       state.checkers = gameService.getCheckersAfterMove(move, activeChecker, checkers)
       state.availableMoves = null
       state.activeChecker = null
 
       const additionalJumps = gameService.additionalJumps(move, state.checkers)
       if (additionalJumps) {
-        const { row, square } = move
-        state.activeChecker = gameService.getCheckerById(activeChecker.id, checkers, { row, square })
+        // Update the activeChecker with current checker state
+        state.activeChecker = gameService.getCheckerById(activeChecker.id, state.checkers)
         state.availableMoves = additionalJumps
         return
       }
@@ -71,7 +77,7 @@ export const gameSlice = createSlice({
   },
 })
 
-export const { setGame, setActiveChecker, setCheckerMoved, resetGame } = gameSlice.actions
+export const { setGame, setActiveChecker, setCheckerMoved, resetGame, setSelectedMove } = gameSlice.actions
 
 export default gameSlice.reducer
 
