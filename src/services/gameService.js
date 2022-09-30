@@ -142,10 +142,10 @@ const getNeighborSquares = (row, square) => {
   const { up, down, left, right } = directions
 
   return {
-    a: setMove(up, left),
-    b: setMove(up, right),
-    c: setMove(down, right),
-    d: setMove(down, left)
+    a: setMove(up, left, 'a'),
+    b: setMove(up, right, 'b'),
+    c: setMove(down, right, 'c'),
+    d: setMove(down, left, 'd')
   }
 }
 
