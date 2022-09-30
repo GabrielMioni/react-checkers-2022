@@ -1,11 +1,11 @@
 import React from 'react';
-import { setCheckerMoved } from '../store/gameSlice'
+import { setSelectedMove } from '../store/gameSlice'
 import '../scss/move.scss'
 import store from '../store'
 
 const clickMove = (event, occupyingMove) => {
   event.stopPropagation()
-  store.dispatch(setCheckerMoved(occupyingMove))
+  store.dispatch(setSelectedMove(occupyingMove))
 }
 
 function Move ({ occupyingMove }) {
