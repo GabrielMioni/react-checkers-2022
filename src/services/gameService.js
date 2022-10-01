@@ -187,6 +187,7 @@ const checkForOpponentNeighbors = (neighborSquares, checkers, activeChecker) => 
     const opponentNeighbors = getNeighborSquares(occupyingRow, occupyingSquare)
     const jumpMove = opponentNeighbors[key]
     if (jumpMove === null) {
+      movesOut[key] = null
       return
     }
     const { row: jumpRow, square: jumpSquare } = jumpMove
