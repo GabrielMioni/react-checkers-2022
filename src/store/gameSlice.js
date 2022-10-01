@@ -8,6 +8,7 @@ export const gameSlice = createSlice({
     checkers: [],
     activeChecker: null,
     availableMoves: null,
+    multiJumpActive: false,
     selectedMove: null,
     currentPlayer: players.a,
     winner: null
@@ -17,32 +18,34 @@ export const gameSlice = createSlice({
       state.checkers = gameService.setPlayerCheckers()
     },
     setActiveChecker: (state, action) => {
-      const activeChecker = action.payload
-      if (!activeChecker) {
-        state.activeChecker = null
-        state.availableMoves = null
+      const newActiveChecker = action.payload
+      if (!newActiveChecker) {
+        if (!state.multiJumpActive) {
+          state.activeChecker = null
+          state.availableMoves = null
+        }
         return
       }
-      if (activeChecker.player !== state.currentPlayer) {
+      if (newActiveChecker.player !== state.currentPlayer) {
         return
       }
       if (state.activeChecker) {
         const { row: activeRow, square: activeSquare } = state.activeChecker
-        const { row: newRow, square: newSquare } = activeChecker
-        if (activeRow === newRow && activeSquare === newSquare) {
+        const { row: newRow, square: newSquare } = newActiveChecker
+        if (!state.multiJumpActive && (activeRow === newRow && activeSquare === newSquare)) {
           state.activeChecker = null
           state.availableMoves = null
           return
         }
       }
 
-      state.activeChecker = activeChecker
-      state.availableMoves = gameService.getAvailableMoves(activeChecker, state.checkers)
+      state.activeChecker = newActiveChecker
+      state.availableMoves = gameService.getAvailableMoves(newActiveChecker, state.checkers)
     },
     setSelectedMove: (state, action) => {
       state.selectedMove = action.payload
     },
-    setCheckerMoved: (state, action) => {
+    setCheckerMoved: (state) => {
       const move = state.selectedMove
       const { activeChecker, checkers } = state
 
@@ -54,6 +57,7 @@ export const gameSlice = createSlice({
       const additionalJumps = gameService.additionalJumps(move, state.checkers)
       if (additionalJumps) {
         // Update the activeChecker with current checker state
+        state.multiJumpActive = true
         state.activeChecker = gameService.getCheckerById(activeChecker.id, state.checkers)
         state.availableMoves = additionalJumps
         return
