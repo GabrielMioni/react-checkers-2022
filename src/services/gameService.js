@@ -1,4 +1,4 @@
-import { isOdd, setMove } from '../utils/utils'
+import { isOdd } from '../utils/utils'
 import { players } from './players'
 import { movementIds } from './movementIds'
 
@@ -101,6 +101,54 @@ export const getAvailableMoves = (activeChecker, checkers) => {
       : { ...moves, a: null, b: null }
 }
 
+const checkForOpponentNeighbors = (neighborSquares, checkers, activeChecker) => {
+  const movesOut = { ...neighborSquares }
+
+  Object.keys(neighborSquares).map(key => {
+    const move = neighborSquares[key]
+    if (!move) {
+      return
+    }
+
+    const { row: moveRow, square: moveSquare } = move
+    const occupyingChecker = getCheckerFromSquare(moveRow, moveSquare, checkers)
+    if (!occupyingChecker) {
+      return
+    }
+    if (occupyingChecker.player === activeChecker.player) {
+      movesOut[key] = null
+      return
+    }
+    const { row: occupyingRow, square: occupyingSquare } = occupyingChecker
+
+    const opponentNeighbors = getNeighborSquares(occupyingRow, occupyingSquare)
+    const jumpMove = opponentNeighbors[key]
+    if (jumpMove === null) {
+      movesOut[key] = null
+      return
+    }
+    const { row: jumpRow, square: jumpSquare } = jumpMove
+
+    const occupyingCheckerTwo = getCheckerFromSquare(jumpRow, jumpSquare, checkers)
+
+    const occupyingCheckerId = occupyingChecker.id
+
+    movesOut[key] = occupyingCheckerTwo
+      ? null
+      : { row: jumpRow, square: jumpSquare, kill: occupyingCheckerId, movementId: key }
+  })
+
+  return movesOut
+}
+
+const getCheckerFromSquare = (row, square, checkers) => {
+  const found = checkers.find(checker => {
+    const { row: occupiedRow, square: occupiedSquare } = checker
+    return row === occupiedRow && square === occupiedSquare
+  })
+  return found ? found : null
+}
+
 export const additionalJumps = (move, checkers) => {
   const { row, square, kill } = move
   if (!kill) {
@@ -161,52 +209,10 @@ const getNeighborSquares = (row, square) => {
   }
 }
 
-const checkForOpponentNeighbors = (neighborSquares, checkers, activeChecker) => {
-  const movesOut = { ...neighborSquares }
-
-  Object.keys(neighborSquares).map(key => {
-    const move = neighborSquares[key]
-    if (!move) {
-      return
-    }
-
-    const { row: moveRow, square: moveSquare } = move
-    const occupyingChecker = getCheckerFromSquare(moveRow, moveSquare, checkers)
-    if (!occupyingChecker) {
-      return
-    }
-    if (occupyingChecker.player === activeChecker.player) {
-      movesOut[key] = null
-      return
-    }
-    const { row: occupyingRow, square: occupyingSquare } = occupyingChecker
-
-    const opponentNeighbors = getNeighborSquares(occupyingRow, occupyingSquare)
-    const jumpMove = opponentNeighbors[key]
-    if (jumpMove === null) {
-      movesOut[key] = null
-      return
-    }
-    const { row: jumpRow, square: jumpSquare } = jumpMove
-
-    const occupyingCheckerTwo = getCheckerFromSquare(jumpRow, jumpSquare, checkers)
-
-    const occupyingCheckerId = occupyingChecker.id
-
-    movesOut[key] = occupyingCheckerTwo
-      ? null
-      : { row: jumpRow, square: jumpSquare, kill: occupyingCheckerId, movementId: key }
-  })
-
-  return movesOut
-}
-
-const getCheckerFromSquare = (row, square, checkers) => {
-  const found = checkers.find(checker => {
-    const { row: occupiedRow, square: occupiedSquare } = checker
-    return row === occupiedRow && square === occupiedSquare
-  })
-  return found ? found : null
+const setMove = (directionY, directionX, movementId) => {
+  return directionY === null || directionX === null
+    ? null
+    : { row: directionY, square: directionX, kill: null, movementId }
 }
 
 export const getCheckersAfterMove = (move, activeChecker, checkers) => {
