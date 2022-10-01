@@ -1,13 +1,14 @@
 import React from 'react';
 import store from '../store'
-import { setActiveChecker, setCheckerMoved } from '../store/gameSlice'
+import { setActiveChecker, setCheckerMoved, checkerHasPossibleMove } from '../store/gameSlice'
 import crown from '../assets/crown.png'
 import '../scss/checker.scss'
 import { useSelector } from 'react-redux'
 
-const clickChecker = (event, checker) => {
+const clickChecker = (event, checker, hasPossibleMove) => {
   event.stopPropagation()
-  store.dispatch(setActiveChecker(checker))
+  const setValue = hasPossibleMove ? checker : null
+  store.dispatch(setActiveChecker(setValue))
 }
 
 const renderCheckerContent = (isKing, row, square) => {
@@ -16,10 +17,15 @@ const renderCheckerContent = (isKing, row, square) => {
     : `${row},${square}`
 }
 
-const buildCheckerClasses = (checker, activeChecker, selectedMove) => {
+const buildCheckerClasses = (checker, activeChecker, selectedMove, hasPossibleMove) => {
   const { id, player } = checker
 
   const classes = [`checker player-${player}`]
+
+  if (hasPossibleMove && !activeChecker) {
+    classes.push('has-possible-move')
+  }
+
   const isActive = id === activeChecker?.id
 
   if (!selectedMove && isActive) {
@@ -39,11 +45,14 @@ function Checker ({ checker }) {
 
   const selectedMove = useSelector(state => state.game.selectedMove)
   const activeChecker = useSelector(state => state.game.activeChecker)
+  const possibleMoves = useSelector(state => state.game.possibleMoves)
+
+  const hasPossibleMove = checkerHasPossibleMove(possibleMoves, checker)
 
   return (
     <div
-      className={buildCheckerClasses(checker, activeChecker, selectedMove )}
-      onClick={e => clickChecker(e, checker)}
+      className={buildCheckerClasses(checker, activeChecker, selectedMove, hasPossibleMove )}
+      onClick={e => clickChecker(e, checker, hasPossibleMove)}
       onAnimationEnd={() => store.dispatch(setCheckerMoved())}>
       <div className="checker__piece">
         { renderCheckerContent(isKing, row, square) }
