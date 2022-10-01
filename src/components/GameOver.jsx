@@ -3,10 +3,9 @@ import Dialog from './common/dialog/Dialog'
 import { useSelector } from 'react-redux'
 import Card from './common/card/Card'
 import store from '../store'
-import { resetGame } from '../store/gameSlice'
+import { setGame } from '../store/gameSlice'
 
 function GameOver (props) {
-
   const winner = useSelector(state => state.game.winner)
 
   if (!winner) {
@@ -24,7 +23,7 @@ function GameOver (props) {
           <div>
             <button
               className="button"
-              onClick={() => store.dispatch(resetGame())}>
+              onClick={() => store.dispatch(setGame())}>
               Play Again
             </button>
           </div>
