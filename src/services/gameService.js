@@ -77,6 +77,20 @@ export const findMoveOccupyingSquare = (availableMoves, rowIndex, squareIndex) =
 
   return false
 }
+const hasValidMoves = move => Object.keys(move).filter(movementId => move[movementId]).length > 0
+
+export const findCheckersWithPossibleMoves = (player, checkers) => {
+  return checkers.filter(checker => {
+    if (checker.player !== player) {
+      return false
+    }
+    const moves = getAvailableMoves(checker, checkers)
+    const result = hasValidMoves(moves)
+    if (result) {
+      return true
+    }
+  })
+}
 
 export const getAvailableMoves = (activeChecker, checkers) => {
   const { isKing, player, row, square } = activeChecker
