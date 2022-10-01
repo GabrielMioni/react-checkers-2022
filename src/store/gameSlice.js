@@ -8,6 +8,7 @@ export const gameSlice = createSlice({
     checkers: [],
     activeChecker: null,
     availableMoves: null,
+    checkersWithPossibleMoves: null,
     multiJumpActive: false,
     selectedMove: null,
     currentPlayer: players.a,
@@ -16,6 +17,7 @@ export const gameSlice = createSlice({
   reducers: {
     setGame: (state, action) => {
       state.checkers = gameService.setPlayerCheckers()
+      state.possibleMoves = gameService.findCheckersWithPossibleMoves(state.currentPlayer, state.checkers)
     },
     setActiveChecker: (state, action) => {
       const newActiveChecker = action.payload
@@ -46,20 +48,20 @@ export const gameSlice = createSlice({
       state.selectedMove = action.payload
     },
     setCheckerMoved: (state) => {
-      const move = state.selectedMove
-      const { activeChecker, checkers } = state
+      const { activeChecker, checkers, selectedMove } = state
 
-      state.selectedMove = null
-      state.checkers = gameService.getCheckersAfterMove(move, activeChecker, checkers)
-      state.availableMoves = null
       state.activeChecker = null
+      state.availableMoves = null
+      state.multiJumpActive = null
+      state.selectedMove = null
+      state.checkers = gameService.getCheckersAfterMove(selectedMove, activeChecker, checkers)
 
-      const additionalJumps = gameService.additionalJumps(move, state.checkers)
+      const additionalJumps = gameService.additionalJumps(selectedMove, state.checkers)
       if (additionalJumps) {
         // Update the activeChecker with current checker state
-        state.multiJumpActive = true
         state.activeChecker = gameService.getCheckerById(activeChecker.id, state.checkers)
         state.availableMoves = additionalJumps
+        state.multiJumpActive = true
         return
       }
       const playerWon = gameService.playerWon(state.currentPlayer, state.checkers)
@@ -73,6 +75,8 @@ export const gameSlice = createSlice({
       state.currentPlayer = state.currentPlayer === players.a
         ? players.b
         : players.a
+
+      state.possibleMoves = gameService.findCheckersWithPossibleMoves(state.currentPlayer, state.checkers)
     },
     resetGame: (state, action) => {
       state.checkers = gameService.setPlayerCheckers()
@@ -92,4 +96,13 @@ export const squareHasChecker = (checkers, row, square) => {
 
 export const squareHasMove = (availableMoves, row, square) => {
   return gameService.findMoveOccupyingSquare(availableMoves, row, square)
+}
+
+export const checkerHasPossibleMove = (possibleMoves, checker) => {
+  if (!possibleMoves) {
+    return false
+  }
+  return possibleMoves
+    .map(move => move.id)
+    .filter(moveId => moveId === checker.id).length > 0
 }
