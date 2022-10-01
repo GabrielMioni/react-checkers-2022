@@ -85,10 +85,7 @@ export const findCheckersWithPossibleMoves = (player, checkers) => {
       return false
     }
     const moves = getAvailableMoves(checker, checkers)
-    const result = hasValidMoves(moves)
-    if (result) {
-      return true
-    }
+    return hasValidMoves(moves)
   })
 }
 
@@ -231,5 +228,10 @@ const checkerShouldBeKinged = (checker, row) => {
 }
 
 export const playerWon = (player, checkers) => {
-  return  checkers.filter(checker => checker.player !== player).length <= 0
+  const remainingCheckers = checkers.filter(checker => checker.player !== player).length <= 0
+  if (remainingCheckers) {
+    return true
+  }
+  const opponent = player === players.a ? players.b : players.a
+  return findCheckersWithPossibleMoves(opponent, checkers).length <= 0
 }
