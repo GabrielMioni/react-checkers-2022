@@ -31,9 +31,12 @@
     }
   }
   &.active {
-    //background: rgba(221,160,221, 0.5);
-    background: rgba(gold, 0.8);
-    box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 1);
+    background: rgba(gold, 0.75);
+    box-shadow: inset 0 0 0 3px rgba(white, 1);
+  }
+  &.has-possible-move {
+    background: rgba(green, .75);
+    box-shadow: inset 0 0 0 3px rgba(white, 1);
   }
   &.player {
     &-a {
