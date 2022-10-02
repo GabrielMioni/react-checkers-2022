@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import * as gameService from '../services/gameService'
 import { players } from '../services/players'
+import computerPlayerService from '../services/computerPlayerService'
 
 export const gameSlice = createSlice({
   name: 'game',
@@ -76,6 +77,9 @@ export const gameSlice = createSlice({
       state.currentPlayer = state.currentPlayer === players.a
         ? players.b
         : players.a
+
+      const computerPlayer = new computerPlayerService(state.currentPlayer, state.checkers)
+      computerPlayer.getBestMove()
 
       state.possibleMoves = gameService.findCheckersWithPossibleMoves(state.currentPlayer, state.checkers)
     }
