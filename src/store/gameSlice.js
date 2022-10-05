@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import * as gameService from '../services/gameService'
 import { players } from '../services/players'
-import computerPlayerService from '../services/computerPlayerService'
+import { getBestMove } from '../services/computerPlayerService'
 
 export const gameSlice = createSlice({
   name: 'game',
@@ -13,7 +13,8 @@ export const gameSlice = createSlice({
     multiJumpActive: false,
     selectedMove: null,
     currentPlayer: players.a,
-    winner: null
+    winner: null,
+    computerPlayer: true
   },
   reducers: {
     setGame: (state, action) => {
@@ -78,8 +79,13 @@ export const gameSlice = createSlice({
         ? players.b
         : players.a
 
-      const computerPlayer = new computerPlayerService(state.currentPlayer, state.checkers)
-      computerPlayer.getBestMove()
+      // const computerPlayer = new computerPlayerService(state.currentPlayer, state.checkers)
+      // computerPlayer.getBestMove()
+
+      if (state.computerPlayer && state.currentPlayer === players.b) {
+        const computerMove = getBestMove(state.checkers, state.currentPlayer)
+        console.log(computerMove)
+      }
 
       state.possibleMoves = gameService.findCheckersWithPossibleMoves(state.currentPlayer, state.checkers)
     }
