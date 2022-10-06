@@ -55,20 +55,24 @@ export const getBestMove = (checkers, player) => {
 const minimaxTwo = (move, checkers, maximizing, depth) => {
 
   // console.log(JSON.stringify(checkers, null, 2))
-  console.log({
-    move,
-    maximizing,
-    depth
-  })
-  debugger
-  let score = -Infinity
+  // console.log({
+  //   move,
+  //   maximizing,
+  //   depth
+  // })
+  let score = move.kill ? 10 : -Infinity
+  // console.log(score)
 
-  if (move.kill) {
-    score = score +10
+  const currentPlayer = maximizing ? players.b : players.a
+  const playerWon = gameService.playerWon(currentPlayer, checkers)
+
+  if (playerWon) {
+    score = score + 1000
   }
 
-  if (depth <= 0) {
-    console.log('bringo', score)
+  console.log({ score1: score })
+  if (depth <= 0 || playerWon) {
+    // console.log({ score })
     return score
   }
 
@@ -76,55 +80,28 @@ const minimaxTwo = (move, checkers, maximizing, depth) => {
   const updatedCheckers = gameService.getCheckersAfterMove(move, activeChecker, checkers)
 
   // Switch players
-  const opponentPlayer = maximizing ? players.a : players.b
+  // const opponentPlayer = maximizing ? players.a : players.b
+  const opponentPlayer = currentPlayer === players.a ? players.b : players.a
   const opponentCheckersWithMoves = gameService.findCheckersWithPossibleMoves(opponentPlayer, updatedCheckers)
 
-  opponentCheckersWithMoves.map(checker => {
+  opponentCheckersWithMoves.forEach(checker => {
     // console.log(JSON.stringify(checker, null, 2))
     const checkerMoves = movesArrayForChecker(checker, checkers)
 
-    checkerMoves.map(move => {
+    checkerMoves.forEach(move => {
       const opponentActiveChecker = gameService.getCheckerById(move.checkerId, updatedCheckers)
-      const opponentUpdatedCheckers = gameService.getCheckersAfterMove(move, opponentActiveChecker, checkers)
+      const opponentUpdatedCheckers = gameService.getCheckersAfterMove(move, opponentActiveChecker, updatedCheckers)
 
-      console.log(move)
+      // console.log(move)
+      const currentDepth = depth -1
+      console.log({ currentDepth })
       const opponentScore = minimaxTwo(move, opponentUpdatedCheckers, !maximizing, depth -1)
+      console.log({ opponentScore, depth })
       score = score - opponentScore
       // console.log(score)
     })
-
-    // const newScore = minimaxTwo(move, updatedCheckers, !maximizing, depth -1)
-    // score = score + newScore
   })
 
-
-  // console.log(JSON.stringify(updatedCheckers, null, 2))
-  // debugger
-
+  console.log({ score2: score })
   return score
-}
-
-const minimax = (move, checker, checkers, maximizing, depth) => {
-  let score = -Infinity
-  if (move.kill) {
-    score = score + 10
-  }
-
-  if (depth > 0) {
-    const updatedCheckers = gameService.getCheckersAfterMove(move, checker, checkers)
-    const checkerMoves = movesArrayForChecker(checker, checkers)
-
-    // console.log(JSON.stringify(checkers, null, 2))
-    // console.log(JSON.stringify(updatedCheckers, null, 2))
-
-    checkerMoves.map(move => {
-      const activeChecker = gameService.getCheckerById(move.checkerId, updatedCheckers)
-      const newScore = minimax(move, activeChecker, updatedCheckers, !maximizing, depth -1)
-      if (newScore > score) {
-        score = score + newScore
-      }
-    })
-  }
-
-  return maximizing ? score : score - (score * 2)
 }
