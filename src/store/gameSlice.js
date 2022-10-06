@@ -59,6 +59,7 @@ export const gameSlice = createSlice({
       state.availableMoves = null
       state.multiJumpActive = null
       state.selectedMove = null
+      state.computerMove = null
       state.checkers = gameService.getCheckersAfterMove(selectedMove, activeChecker, checkers)
 
       const additionalJumps = gameService.additionalJumps(selectedMove, state.checkers)
