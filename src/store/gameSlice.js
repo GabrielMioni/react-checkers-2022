@@ -14,11 +14,13 @@ export const gameSlice = createSlice({
     selectedMove: null,
     currentPlayer: players.a,
     winner: null,
-    computerPlayer: true
+    computerPlayer: true,
+    computerMove: null
   },
   reducers: {
     setGame: (state, action) => {
       state.winner = null
+      state.currentPlayer = players.a
       state.checkers = gameService.setPlayerCheckers()
       state.possibleMoves = gameService.findCheckersWithPossibleMoves(state.currentPlayer, state.checkers)
     },
@@ -79,15 +81,23 @@ export const gameSlice = createSlice({
         ? players.b
         : players.a
 
-      // const computerPlayer = new computerPlayerService(state.currentPlayer, state.checkers)
-      // computerPlayer.getBestMove()
+      if (!state.computerPlayer) {
+        state.possibleMoves = gameService.findCheckersWithPossibleMoves(state.currentPlayer, state.checkers)
+        return
+      }
 
       if (state.computerPlayer && state.currentPlayer === players.b) {
         const computerMove = getBestMove(state.checkers, state.currentPlayer)
-        console.log(computerMove)
-      }
+        state.activeChecker = gameService.getCheckerById(computerMove.checkerId, state.checkers)
+        state.availableMoves = gameService.getAvailableMoves(state.activeChecker, state.checkers)
+        state.computerMove = computerMove
 
-      state.possibleMoves = gameService.findCheckersWithPossibleMoves(state.currentPlayer, state.checkers)
+        const computerWon = gameService.playerWon(state.currentPlayer, state.checkers)
+        if (computerWon) {
+          state.winner = state.currentPlayer
+          console.log(`Player ${state.currentPlayer} won!`)
+        }
+      }
     }
   },
 })
