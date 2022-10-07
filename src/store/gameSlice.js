@@ -82,28 +82,28 @@ export const gameSlice = createSlice({
         ? players.b
         : players.a
 
-      if (!state.computerPlayer) {
-        state.possibleMoves = gameService.findCheckersWithPossibleMoves(state.currentPlayer, state.checkers)
-        return
-      }
+      state.availableMoves = null
+      state.activeChecker = null
+      state.possibleMoves = gameService.findCheckersWithPossibleMoves(state.currentPlayer, state.checkers)
+      console.log('end')
+    },
+    setComputerTurn: (state, action) => {
+      const computerMove = getBestMove(state.checkers, state.currentPlayer)
+      console.log({ computerMove })
+      state.computerMove = computerMove
+      state.activeChecker = gameService.getCheckerById(computerMove.checkerId, state.checkers)
+      state.availableMoves = gameService.getAvailableMoves(state.activeChecker, state.checkers)
 
-      if (state.computerPlayer && state.currentPlayer === players.b) {
-        const computerMove = getBestMove(state.checkers, state.currentPlayer)
-        state.activeChecker = gameService.getCheckerById(computerMove.checkerId, state.checkers)
-        state.availableMoves = gameService.getAvailableMoves(state.activeChecker, state.checkers)
-        state.computerMove = computerMove
-
-        const computerWon = gameService.playerWon(state.currentPlayer, state.checkers)
-        if (computerWon) {
-          state.winner = state.currentPlayer
-          console.log(`Player ${state.currentPlayer} won!`)
-        }
+      const computerWon = gameService.playerWon(state.currentPlayer, state.checkers)
+      if (computerWon) {
+        state.winner = state.currentPlayer
+        console.log(`Player ${state.currentPlayer} won!`)
       }
     }
   },
 })
 
-export const { setGame, setActiveChecker, setCheckerMoved, setSelectedMove } = gameSlice.actions
+export const { setGame, setActiveChecker, setCheckerMoved, setSelectedMove, setComputerTurn } = gameSlice.actions
 
 export default gameSlice.reducer
 
