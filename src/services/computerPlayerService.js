@@ -11,15 +11,15 @@ const movesArrayForChecker = (checker, checkers) => {
     .filter(move => move)
 }
 
-const findBestScore = (arrayData) => {
-  const topScore = Math.max(...arrayData.map(data => data.score))
-  const results = arrayData.filter(data => data.score === topScore)
+const findBestScore = (moves) => {
+  const results = moves.filter(move => !isNaN(move.score))
 
-  return results
-    ? null
-    : results.length > 1
-      ? null
-      : results[0]
+  if (results.length > 1) {
+    const topScore = Math.max(...results.map(data => data.score))
+    return  results.find(result => result.score === topScore)
+  }
+
+  return results[0]
 }
 
 export const getBestMove = (checkers, player) => {
@@ -50,8 +50,11 @@ export const getBestMove = (checkers, player) => {
 const minimax = (move, checkers, maximizing, depth) => {
   let score = move.kill ? 10 : -Infinity
 
+  const activeChecker = gameService.getCheckerById(move.checkerId, checkers)
+  const updatedCheckers = gameService.getCheckersAfterMove(move, activeChecker, checkers)
+
   const currentPlayer = maximizing ? players.b : players.a
-  const playerWon = gameService.playerWon(currentPlayer, checkers)
+  const playerWon = gameService.playerWon(currentPlayer, updatedCheckers)
 
   if (playerWon) {
     score = score + 1000
@@ -60,9 +63,6 @@ const minimax = (move, checkers, maximizing, depth) => {
   if (depth <= 0 || playerWon) {
     return score
   }
-
-  const activeChecker = gameService.getCheckerById(move.checkerId, checkers)
-  const updatedCheckers = gameService.getCheckersAfterMove(move, activeChecker, checkers)
 
   // Switch players
   const opponentPlayer = currentPlayer === players.a ? players.b : players.a
