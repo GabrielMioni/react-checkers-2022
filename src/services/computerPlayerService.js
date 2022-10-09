@@ -54,10 +54,12 @@ const miniMax = (checkers, depth, maximizing) => {
   let bestScore = maximizing ? -Infinity : +Infinity
   let bestMove = null
 
+  const allScores = []
+
   for (const move of moves) {
     let updatedCheckers = getCheckersFromMove(move, checkers)
-
     const { bestScore: newScore } = miniMax(updatedCheckers, depth -1, !maximizing)
+    allScores.push(newScore)
 
     const maximizerWins = maximizing && (newScore > bestScore)
     const minimizerWins = !maximizing && (newScore < bestScore)
@@ -67,5 +69,20 @@ const miniMax = (checkers, depth, maximizing) => {
       bestMove = move
     }
   }
+  const shouldRandomMove = needsRandomMove(allScores)
+  if (shouldRandomMove) {
+    bestMove = randomMove(moves)
+  }
   return { bestScore, bestMove }
+}
+
+const needsRandomMove = (scoreArray) => {
+  const max = Math.max.apply(Math, scoreArray)
+  const results = scoreArray.filter(score => score === max)
+  return results.length > 0
+}
+
+const randomMove = (moves) => {
+  const index = Math.floor(Math.random() * moves.length)
+  return moves[index]
 }
