@@ -7,6 +7,7 @@ import store from '../store'
 function BoardLogic () {
   const computerIsPlaying = useSelector(state => state.game.computerPlayer)
   const currentPlayer = useSelector(state => state.game.currentPlayer)
+  const multiJumpActive = useSelector(state => state.game.multiJumpActive)
 
   /* **************************************************************************
    * If the game is has a computer player and the current player is
@@ -20,7 +21,8 @@ function BoardLogic () {
       store.dispatch(setComputerTurn())
     }, 0)
 
-  }, [computerIsPlaying, currentPlayer])
+    // Might want to look at a way of only dispatching for multiJump when it's true
+  }, [computerIsPlaying, currentPlayer, multiJumpActive])
 
   /* **************************************************************************
    * If a computer move is present, use it to find the available move and
