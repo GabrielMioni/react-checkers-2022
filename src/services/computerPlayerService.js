@@ -59,18 +59,12 @@ const miniMax = (checkers, depth, maximizing) => {
 
     const { bestScore: newScore } = miniMax(updatedCheckers, depth -1, !maximizing)
 
-    if (maximizing) {
-      if (newScore > bestScore) {
-        bestScore = newScore
-        bestMove = move
-      }
-    }
+    const maximizerWins = maximizing && (newScore > bestScore)
+    const minimizerWins = !maximizing && (newScore < bestScore)
 
-    if (!maximizing) {
-      if (newScore < bestScore) {
-        bestScore = newScore
-        bestMove = move
-      }
+    if (maximizerWins || minimizerWins) {
+      bestScore = newScore
+      bestMove = move
     }
   }
   return { bestScore, bestMove }
