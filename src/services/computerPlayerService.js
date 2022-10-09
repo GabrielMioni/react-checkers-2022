@@ -1,83 +1,77 @@
 import * as gameService from '../services/gameService'
 import { players } from './players'
 
+export const getBestMove = (checkers) => {
+  const results = miniMax(checkers, 4, true)
+  const { bestMove } = results
+  return bestMove
+}
+
+const getCheckersForPlayer = (checkers, player) => {
+  return checkers.filter(checker => checker.player === player)
+}
+
+const evaluateCheckersTwo = (checkers) => {
+  const countA = 12 - getCheckersForPlayer(checkers, players.a).length
+  const countB = 12 - getCheckersForPlayer(checkers, players.b).length
+  return countA - countB
+}
+
 const movesArrayForChecker = (checker, checkers) => {
   const checkerMoveObject = gameService.getAvailableMoves(checker, checkers)
   return Object.keys(checkerMoveObject)
     .map(movementId => {
       const moveObject = checkerMoveObject[movementId]
-      return moveObject ? { ...moveObject, checkerId: checker.id, movementId } : null
+      return moveObject ? { ...moveObject, movementId, checker } : null
     })
     .filter(move => move)
 }
 
-const findBestScore = (moves) => {
-  const results = moves.filter(move => !isNaN(move.score))
+const getAllMovesForCheckers = (checkers, player) => {
+  const checkersWithMoves = gameService.findCheckersWithPossibleMoves(player, checkers)
+  let moves = []
 
-  if (results.length > 1) {
-    const topScore = Math.max(...results.map(data => data.score))
-    return  results.find(result => result.score === topScore)
-  }
-
-  return results[0]
+  checkersWithMoves.forEach(checker => {
+    moves = [...moves, ...movesArrayForChecker(checker, checkers)]
+  })
+  return moves
 }
 
-export const getBestMove = (checkers, player) => {
-  const results = []
-
-  const checkersWithPossibleMoves = gameService.findCheckersWithPossibleMoves(player, checkers)
-  checkersWithPossibleMoves.map(checker => {
-    const checkerMoves = movesArrayForChecker(checker, checkers)
-
-    checkerMoves.map(move => {
-      const { row, square, movementId } = move
-      const score = minimax(move, checkers, true, 4)
-      results.push({
-        checkerId: checker.id,
-        row,
-        square,
-        score,
-        movementId
-      })
-    })
-  })
-
-  const bestScore = findBestScore(results)
-
-  return bestScore ? bestScore : results[0]
+const getCheckersFromMove = (move, checkers) => {
+  const { checker: activeChecker } = move
+  return gameService.getCheckersAfterMove(move, activeChecker, checkers)
 }
 
-const minimax = (move, checkers, maximizing, depth) => {
-  let score = move.kill ? 10 : -Infinity
+const miniMax = (checkers, depth, maximizing) => {
+  let score = evaluateCheckersTwo(checkers)
+  const player = maximizing ? players.b : players.a
+  const moves = getAllMovesForCheckers(checkers, player)
 
-  const activeChecker = gameService.getCheckerById(move.checkerId, checkers)
-  const updatedCheckers = gameService.getCheckersAfterMove(move, activeChecker, checkers)
-
-  const currentPlayer = maximizing ? players.b : players.a
-  const playerWon = gameService.playerWon(currentPlayer, updatedCheckers)
-
-  if (playerWon) {
-    score = score + 1000
+  if (depth <= 0 || moves.length <= 0 || score >= 12) {
+    return { bestScore: score }
   }
 
-  if (depth <= 0 || playerWon) {
-    return score
+  let bestScore = maximizing ? -Infinity : +Infinity
+  let bestMove = null
+
+  for (const move of moves) {
+    let updatedCheckers = getCheckersFromMove(move, checkers)
+
+    const { bestScore: newScore } = miniMax(updatedCheckers, depth -1, !maximizing)
+
+    if (maximizing) {
+      if (newScore > bestScore) {
+        bestScore = newScore
+        bestMove = move
+      }
+    }
+
+    if (!maximizing) {
+      if (newScore < bestScore) {
+        bestScore = newScore
+        bestMove = move
+      }
+    }
   }
-
-  // Switch players
-  const opponentPlayer = currentPlayer === players.a ? players.b : players.a
-  const opponentCheckersWithMoves = gameService.findCheckersWithPossibleMoves(opponentPlayer, updatedCheckers)
-
-  opponentCheckersWithMoves.forEach(checker => {
-    const checkerMoves = movesArrayForChecker(checker, checkers)
-
-    checkerMoves.forEach(move => {
-      const opponentActiveChecker = gameService.getCheckerById(move.checkerId, updatedCheckers)
-      const opponentUpdatedCheckers = gameService.getCheckersAfterMove(move, opponentActiveChecker, updatedCheckers)
-      const opponentScore = minimax(move, opponentUpdatedCheckers, !maximizing, depth -1)
-      score = score - opponentScore
-    })
-  })
-
-  return score
+  return { bestScore, bestMove }
 }
