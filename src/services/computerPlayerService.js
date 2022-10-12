@@ -2,7 +2,7 @@ import * as gameService from '../services/gameService'
 import { players } from './players'
 
 export const getBestMove = (checkers) => {
-  const results = miniMax(checkers, 4, true, -Infinity, +Infinity)
+  const results = miniMax(checkers, 0, 4, true, -Infinity, +Infinity)
   const { bestMove } = results
   return bestMove
 }
@@ -42,12 +42,12 @@ const getCheckersFromMove = (move, checkers) => {
   return gameService.getCheckersAfterMove(move, activeChecker, checkers)
 }
 
-const miniMax = (checkers, depth, maximizing, alpha, beta) => {
+const miniMax = (checkers, depth, depthMax, maximizing, alpha, beta) => {
   let score = evaluateCheckersTwo(checkers)
   const player = maximizing ? players.b : players.a
   const moves = getAllMovesForCheckers(checkers, player)
 
-  if (depth <= 0 || moves.length <= 0 || score >= 12) {
+  if (depth >= depthMax || moves.length <= 0 || score >= 12) {
     return { bestScore: score }
   }
 
@@ -58,7 +58,7 @@ const miniMax = (checkers, depth, maximizing, alpha, beta) => {
 
   for (const move of moves) {
     let updatedCheckers = getCheckersFromMove(move, checkers)
-    const { bestScore: newScore } = miniMax(updatedCheckers, depth -1, !maximizing, alpha, beta)
+    const { bestScore: newScore } = miniMax(updatedCheckers, depth +1, depthMax, !maximizing, alpha, beta)
 
     allScores.push({ score: newScore, move } )
 
