@@ -12,9 +12,19 @@ const getCheckersForPlayer = (checkers, player) => {
 }
 
 const evaluateCheckersTwo = (checkers, depth) => {
-  const countA = 12 - getCheckersForPlayer(checkers, players.a).length
-  const countB = 12 - getCheckersForPlayer(checkers, players.b).length
-  return (countA - countB) - depth
+  const teamA = getCheckersForPlayer(checkers, players.a)
+  const teamB = getCheckersForPlayer(checkers, players.b)
+
+  const pointsA = 12 - teamA.length
+  const pointsB = 12 - teamB.length
+
+  const foundKingsA = teamA.filter(checker => checker.isKing)
+  const kingsACount = foundKingsA ? foundKingsA.length : 0
+
+  const basicScore = (pointsA - pointsB) - depth
+  const kingScore = kingsACount * 5
+
+  return basicScore - kingScore
 }
 
 const movesArrayForChecker = (checker, checkers) => {
@@ -57,6 +67,7 @@ const miniMax = (checkers, depth, depthMax, maximizing, alpha, beta) => {
   const allScores = []
 
   for (const move of moves) {
+    console.log(JSON.stringify(move, null, 2))
     let updatedCheckers = getCheckersFromMove(move, checkers)
     const { bestScore: newScore } = miniMax(updatedCheckers, depth +1, depthMax, !maximizing, alpha, beta)
 
