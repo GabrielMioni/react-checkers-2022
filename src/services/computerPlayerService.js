@@ -11,10 +11,10 @@ const getCheckersForPlayer = (checkers, player) => {
   return checkers.filter(checker => checker.player === player)
 }
 
-const evaluateCheckersTwo = (checkers) => {
+const evaluateCheckersTwo = (checkers, depth) => {
   const countA = 12 - getCheckersForPlayer(checkers, players.a).length
   const countB = 12 - getCheckersForPlayer(checkers, players.b).length
-  return countA - countB
+  return (countA - countB) - depth
 }
 
 const movesArrayForChecker = (checker, checkers) => {
@@ -43,7 +43,7 @@ const getCheckersFromMove = (move, checkers) => {
 }
 
 const miniMax = (checkers, depth, depthMax, maximizing, alpha, beta) => {
-  let score = evaluateCheckersTwo(checkers)
+  let score = evaluateCheckersTwo(checkers, depth)
   const player = maximizing ? players.b : players.a
   const moves = getAllMovesForCheckers(checkers, player)
 
