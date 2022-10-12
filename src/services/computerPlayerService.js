@@ -52,6 +52,14 @@ const getCheckersFromMove = (move, checkers) => {
   return gameService.getCheckersAfterMove(move, activeChecker, checkers)
 }
 
+const additionalJumpsToArray = (additionalJumps, checker) => {
+  return Object.keys(additionalJumps).map(movementId => {
+    const jumpMove = additionalJumps[movementId]
+    
+    return jumpMove ? { ...jumpMove, movementId, checker } : null
+  }).filter(move => move)
+}
+
 const miniMax = (checkers, depth, depthMax, maximizing, alpha, beta) => {
   let score = evaluateCheckersTwo(checkers, depth)
   const player = maximizing ? players.b : players.a
@@ -67,8 +75,21 @@ const miniMax = (checkers, depth, depthMax, maximizing, alpha, beta) => {
   const allScores = []
 
   for (const move of moves) {
-    console.log(JSON.stringify(move, null, 2))
     let updatedCheckers = getCheckersFromMove(move, checkers)
+    let doubleJumps = gameService.additionalJumps(move, updatedCheckers)
+
+    if (doubleJumps) {
+      while (doubleJumps) {
+        const { row, square } = move
+        const { checker } = move
+        const activeChecker = gameService.getCheckerById(checker.id, updatedCheckers, { row, square })
+        const jumpArray = additionalJumpsToArray(doubleJumps, activeChecker)
+        const naiveJumpMove = jumpArray[0]
+        updatedCheckers = getCheckersFromMove(naiveJumpMove, updatedCheckers)
+        doubleJumps = gameService.additionalJumps(naiveJumpMove, updatedCheckers)
+      }
+    }
+
     const { bestScore: newScore } = miniMax(updatedCheckers, depth +1, depthMax, !maximizing, alpha, beta)
 
     allScores.push({ score: newScore, move } )
