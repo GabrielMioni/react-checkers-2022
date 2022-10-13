@@ -5,7 +5,7 @@ import { getBestMove } from '../services/computerPlayerService'
 import { players } from '../services/players'
 import store from '../store'
 
-function BoardLogic () {
+function ComputerPlayer () {
   const computerIsPlaying = useSelector(state => state.game.computerPlayer)
   const currentPlayer = useSelector(state => state.game.currentPlayer)
   const multiJumpActive = useSelector(state => state.game.multiJumpActive)
@@ -31,4 +31,4 @@ function BoardLogic () {
   return null
 }
 
-export default BoardLogic;
+export default ComputerPlayer;
