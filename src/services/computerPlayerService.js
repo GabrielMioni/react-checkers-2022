@@ -2,7 +2,7 @@ import * as gameService from '../services/gameService'
 import { players } from './players'
 
 export const getBestMove = (checkers) => {
-  const results = miniMax(checkers, 0, 6, true, -Infinity, +Infinity)
+  const results = miniMax(checkers, 0, 4, true, -Infinity, +Infinity)
   const { bestMove } = results
   return bestMove
 }
@@ -129,7 +129,9 @@ const miniMax = (checkers, depth, depthMax, maximizing, alpha, beta) => {
 
 const needsRandomMove = (allScores, maximizing) => {
   const scores = allScores.map(scoreObject => scoreObject.score)
-  const max = maximizing ? Math.max.apply(Math, scores) : Math.min.apply(Math, scores)
+  const max = maximizing
+    ? Math.max.apply(Math, scores)
+    : Math.min.apply(Math, scores)
   const results = allScores.filter(scoreObject => scoreObject.score === max)
 
   return results.length > 0
