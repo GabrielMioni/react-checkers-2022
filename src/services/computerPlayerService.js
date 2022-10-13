@@ -2,7 +2,7 @@ import * as gameService from '../services/gameService'
 import { players } from './players'
 
 export const getBestMove = (checkers) => {
-  const results = miniMax(checkers, 0, 4, true, -Infinity, +Infinity)
+  const results = miniMax(checkers, 0, 6, true, -Infinity, +Infinity)
   const { bestMove } = results
   return bestMove
 }
@@ -122,20 +122,26 @@ const miniMax = (checkers, depth, depthMax, maximizing, alpha, beta) => {
   }
   const shouldRandomMove = needsRandomMove(allScores)
   if (shouldRandomMove) {
-    bestMove = randomMove(moves)
+    bestMove = randomMove(allScores, bestScore, maximizing)
   }
   return { bestScore, bestMove }
 }
 
-const needsRandomMove = (allScores) => {
+const needsRandomMove = (allScores, maximizing) => {
   const scores = allScores.map(scoreObject => scoreObject.score)
-  const max = Math.max.apply(Math, scores)
-  const results = allScores.filter(score => score === max)
+  const max = maximizing ? Math.max.apply(Math, scores) : Math.min.apply(Math, scores)
+  const results = allScores.filter(scoreObject => scoreObject.score === max)
+
   return results.length > 0
 }
 
-const randomMove = (allScores, bestScore) => {
-  const bestScoringMoves = allScores.filter(scoreObject => scoreObject.score >= bestScore)
+const randomMove = (allScoreObjects, bestScore, maximizing) => {
+  const filterMethod = maximizing
+    ? (scoreObject) => scoreObject.score >= bestScore
+    : (scoreObject) => scoreObject.score <= bestScore
+
+  const bestScoringMoves = allScoreObjects.filter(filterMethod)
   const index = Math.floor(Math.random() * bestScoringMoves.length)
-  return bestScoringMoves[index]
+  const bestMoveObject = bestScoringMoves[index]
+  return bestMoveObject.move
 }
