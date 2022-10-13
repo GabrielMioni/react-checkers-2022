@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux'
-import { setComputerTurn, setSelectedMove } from '../store/gameSlice'
+import { setActiveChecker, setSelectedMove } from '../store/gameSlice'
+import { getBestMove } from '../services/computerPlayerService'
 import { players } from '../services/players'
 import store from '../store'
 
@@ -8,6 +9,7 @@ function BoardLogic () {
   const computerIsPlaying = useSelector(state => state.game.computerPlayer)
   const currentPlayer = useSelector(state => state.game.currentPlayer)
   const multiJumpActive = useSelector(state => state.game.multiJumpActive)
+  const checkers = useSelector(state => state.game.checkers)
 
   /* **************************************************************************
    * If the game is has a computer player and the current player is
@@ -17,26 +19,14 @@ function BoardLogic () {
     if (!(computerIsPlaying && currentPlayer === players.b)) {
       return
     }
+    const computerMove = getBestMove(checkers, players.b)
+    const { checker } = computerMove
+
+    store.dispatch(setActiveChecker(checker))
     setTimeout(() => {
-      store.dispatch(setComputerTurn())
-    }, 0)
-
-    // Might want to look at a way of only dispatching for multiJump when it's true
-  }, [computerIsPlaying, currentPlayer, multiJumpActive])
-
-  /* **************************************************************************
-   * If a computer move is present, use it to find the available move and
-   * pass it to setSelectedMove
-   * **************************************************************************/
-  const computerMove = useSelector(state => state.game.computerMove)
-  const availableMoves = useSelector(state => state.game.availableMoves)
-
-  if (computerMove && availableMoves) {
-    setTimeout(() => {
-      const selectedMove = availableMoves[computerMove.movementId]
-      store.dispatch(setSelectedMove(selectedMove))
+      store.dispatch(setSelectedMove(computerMove))
     }, 500)
-  }
+  }, [checkers, computerIsPlaying, currentPlayer, multiJumpActive])
 
   return null
 }
