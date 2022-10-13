@@ -15,6 +15,14 @@ const evaluateCheckersTwo = (checkers, depth) => {
   const teamA = getCheckersForPlayer(checkers, players.a)
   const teamB = getCheckersForPlayer(checkers, players.b)
 
+  if (teamB.length <= 0) {
+    return -Infinity
+  }
+
+  if (teamA.length <= 0) {
+    return +Infinity
+  }
+
   const pointsA = 12 - teamA.length
   const pointsB = 12 - teamB.length
 
