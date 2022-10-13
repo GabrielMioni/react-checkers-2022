@@ -6,17 +6,17 @@ import { players } from '../services/players'
 import store from '../store'
 
 function ComputerPlayer () {
+  const checkers = useSelector(state => state.game.checkers)
   const computerIsPlaying = useSelector(state => state.game.computerPlayer)
   const currentPlayer = useSelector(state => state.game.currentPlayer)
-  const multiJumpActive = useSelector(state => state.game.multiJumpActive)
-  const checkers = useSelector(state => state.game.checkers)
+  const winner = useSelector(state => state.game.winner)
 
   /* **************************************************************************
    * If the game is has a computer player and the current player is
    * the computer, start the computer's turn
    * **************************************************************************/
   useEffect(() => {
-    if (!(computerIsPlaying && currentPlayer === players.b)) {
+    if (!(computerIsPlaying && currentPlayer === players.b) || winner) {
       return
     }
     const computerMove = getBestMove(checkers, players.b)
@@ -26,7 +26,7 @@ function ComputerPlayer () {
     setTimeout(() => {
       store.dispatch(setSelectedMove(computerMove))
     }, 500)
-  }, [checkers, computerIsPlaying, currentPlayer, multiJumpActive])
+  }, [checkers, computerIsPlaying, currentPlayer, winner])
 
   return null
 }
