@@ -2,7 +2,7 @@ import * as gameService from '../services/gameService'
 import { players } from './players'
 
 export const getBestMove = (checkers) => {
-  const results = miniMax(checkers, 0, 10, true, -Infinity, +Infinity)
+  const results = miniMax(checkers, 0, 4, true, -Infinity, +Infinity)
   const { bestMove } = results
   return bestMove
 }
