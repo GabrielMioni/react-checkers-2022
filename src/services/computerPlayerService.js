@@ -2,37 +2,40 @@ import * as gameService from '../services/gameService'
 import { players } from './players'
 
 export const getBestMove = (checkers) => {
-  const results = miniMax(checkers, 0, 4, true, -Infinity, +Infinity)
+  const results = miniMax(checkers, 0, 10, true, -Infinity, +Infinity)
   const { bestMove } = results
   return bestMove
 }
 
-const getCheckersForPlayer = (checkers, player) => {
-  return checkers.filter(checker => checker.player === player)
+const getPlayerScore = (checkers, player) => {
+  const playerCheckers = checkers.filter(checker => checker.player === player)
+  const playerKings = playerCheckers.filter(checker => checker.isKing)
+  const playerEdges = playerCheckers.filter(checker => {
+    const { square } = checker
+    return square <= 0 || square >= 7
+  })
+
+  const basicScore = playerCheckers.length * 2
+  const kingScore = playerKings.length * 10
+  const edgeScore = playerEdges.length * 5
+
+  return basicScore + kingScore + edgeScore
 }
 
-const evaluateCheckersTwo = (checkers, depth) => {
-  const teamA = getCheckersForPlayer(checkers, players.a)
-  const teamB = getCheckersForPlayer(checkers, players.b)
-
-  if (teamB.length <= 0) {
+export const evaluateCheckers = (checkers, depth) => {
+  const playerAWon = gameService.playerWon(players.a, checkers)
+  const playerBWon = gameService.playerWon(players.b, checkers)
+  if (playerAWon) {
     return -Infinity
   }
-
-  if (teamA.length <= 0) {
-    return +Infinity
+  if (playerBWon) {
+    return Infinity
   }
 
-  const pointsA = 12 - teamA.length
-  const pointsB = 12 - teamB.length
+  const scoreA = -getPlayerScore(checkers, players.a)
+  const scoreB = getPlayerScore(checkers, players.b)
 
-  const foundKingsA = teamA.filter(checker => checker.isKing)
-  const kingsACount = foundKingsA ? foundKingsA.length : 0
-
-  const basicScore = (pointsA - pointsB) - depth
-  const kingScore = kingsACount * 5
-
-  return basicScore - kingScore
+  return (scoreA + scoreB) + (depth * 20)
 }
 
 const movesArrayForChecker = (checker, checkers) => {
@@ -69,11 +72,11 @@ const additionalJumpsToArray = (additionalJumps, checker) => {
 }
 
 const miniMax = (checkers, depth, depthMax, maximizing, alpha, beta) => {
-  let score = evaluateCheckersTwo(checkers, depth)
   const player = maximizing ? players.b : players.a
   const moves = getAllMovesForCheckers(checkers, player)
 
-  if (depth >= depthMax || moves.length <= 0 || score >= 12) {
+  if (depth >= depthMax || moves.length <= 0 ) {
+    let score = evaluateCheckers(checkers, depth)
     return { bestScore: score }
   }
 
@@ -98,7 +101,7 @@ const miniMax = (checkers, depth, depthMax, maximizing, alpha, beta) => {
       }
     }
 
-    const { bestScore: newScore } = miniMax(updatedCheckers, depth +1, depthMax, !maximizing, alpha, beta)
+    const { bestScore: newScore } = miniMax(updatedCheckers, depth +1, depthMax, !maximizing, alpha, beta, move)
 
     allScores.push({ score: newScore, move } )
 
